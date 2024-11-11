@@ -1,0 +1,94 @@
+
+
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css" ><link rel="stylesheet" href="static/infocard.css" >
+        </head>
+    <body>
+      <div class="topright">
+            {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a>
+          {% endif %}
+            </div>
+          </div></div>
+          <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
+
+          {{render('menu.html', **globals()) | safe}}
+      <center><div>
+      <div class="rotating-text">
+        <p class="whitetext">The Resource Center </p>
+        <p>
+          <span class="word alizarin">finds.</span>
+          <span class="word wisteria">creates.</span>
+          <span class="word peter-river">simplifies.</span>
+        </p></div></div>
+      </center>
+<!-- Page actually starts here -->
+          <div style="top:150px; position:absolute;">
+          <form action='/fsearch' method="post">
+                <!-- Grade Select -->
+                <br><br><label><b>Select Grades to search for:</b></label>
+                {% for grade in grades %}
+                <input type="checkbox" value="{{ grade }}" name="{{ grade }}">{{ grade }}</option>
+                {% endfor %}<br><br>
+                <!-- Resource Type Select -->
+                <label><b>Select Resource Type:</b></label>
+                {% for type in rtypes %}
+                <input type="checkbox" value="{{ type }}" name="{{ type }}">{{ type }}</input>
+                {% endfor %}
+                <br><br>
+                <label><b>Select Resource Subject:</b></label>
+                <br>
+                <!-- Subject Select -->
+                {% for subject in broad_subjects %}
+                <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="{{ subject }}" onclick="update_children(this)"><label for="{{ subject }}">{{ subject }}</label>
+                {% endfor %}
+                <div style="border: 1px solid #000; padding-left: 5px; padding-right: 10px;">
+                <b>Explanation of Resource Subjects</b>
+                <p>
+                {% for subject in broad_subjects %}
+                {% if subject == "Multiple Areas K-12" %}
+                <span><b>Multiple Areas K-12: </b>Other resources</span>
+                {% else %}
+                <span><b>{{ subject }}: </b>This subject encompasses: {% for sub in broad_subjects[subject] %}{{ sub }}, {% endfor %}and other similar subjects.</span><br>
+                {% endif %}
+                {% endfor %}
+                </p></div>
+                <br>
+                <input type="submit" value="Search">
+                <div class="card-container">
+                  {% if len(results) %}
+                  
+                    {% for result in results %}
+                        <div class="card">
+                            <h2>{{ result[1][1] }}</h2>
+                            {% for i in [result[0]] + result[2:] %}
+                                <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                  {% elif query %}
+                  No results
+                  {% endif %}
+                </div></div>
+        </form></div></div>
+          
+
+                
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/reloadplpc.js"></script>
+                <script src="static/autoscroll.js"></script><script src="static/sliders.js"></script><script src="static/map.js"></script><script src="static/fsearchautoselect.js"></script>
+            </body>
+                </script>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>updateslider()</script>
+</html>

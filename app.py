@@ -429,7 +429,7 @@ if __name__ == '__main__':
 """
 
 if __name__ == "__main__":
-    host, port = "0.0.0.0", 80
+    host, port = "0.0.0.0", 8000
     actual_host = (
         socket.gethostbyname(socket.gethostname()) if host == "0.0.0.0" else host
     )

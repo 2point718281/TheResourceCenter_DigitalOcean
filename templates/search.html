@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css">
+        </head>
+    <body><center><h1>Contest Database</h1></center>
+        
+            <element class="grid-container">
+                <div class="item1">
+                    <input type="text" name="q" id="textsearch" placeholder="Enter search term" style="font-size: 30px;" onsearch="results()">
+                    <input type="button" value="Search" style="font-size: 30px;" onclick="results()">
+                    <br><b>Only use the textbox if you have a particular contest in mind. Otherwise use the other filters.</b></div>
+                
+                <div class="item3">
+                <input type="range" id="minage" name="minage" min="0" max="12" value="0" step="1" onclick="updateslider()">
+                <label for="minage" id="minagel">
+                    Minimum Grade: K
+                </label>
+                <br>
+                <input type="range" id="maxage" name="maxage" min="0" max="12" value="12" step="1" onclick="updateslider()">
+                <label for="maxage" id="maxagel">
+                    Maximum Grade: 12
+                </label></div>
+                <br>
+                <div class="item4">{}</div>
+                <div class="item2" id="results" class="text">Results show up here!</div></element>
+                <div class="topright">
+                    <div class="dropdown">
+                        {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a>
+          {% endif %}
+                        </div>
+                      </div></div>
+                <script src="static/globals.js"></script><script src="static/sliders.js"></script><script src="static/results.js"></script><script src="static/css_auto.js"></script>
+        </body>
+</html>

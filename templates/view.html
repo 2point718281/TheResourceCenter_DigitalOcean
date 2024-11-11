@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css" >
+        </head>
+    <body>
+      <div class="topright">
+            {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a>
+          {% endif %}
+            </div>
+          </div></div>
+          <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
+
+          {{load('menu.html') | safe}}
+      <center><div>
+      <div class="rotating-text">
+        <p class="whitetext">The Resource Center </p>
+        <p>
+          <span class="word alizarin">personalizes.</span>
+          <span class="word alizarin">finds.</span>
+          <span class="word wisteria">creates.</span>
+          <span class="word peter-river">simplifies.</span>
+        </p></div></div>
+      </center>
+
+          <div style="top:150px; position:absolute;"><h1 id="about">Personalized Learning Plan Creator. Please wait while the Learning Plan is building (Do NOT REFRESH)</h1>
+            <iframe id="plp-frame" width="100%" height="600px"></iframe>
+          
+                
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/reloadplpc.js"></script>
+                <script src="static/autoscroll.js"></script>
+                </script>
+        </body>
+</html>

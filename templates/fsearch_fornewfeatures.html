@@ -1,0 +1,90 @@
+
+
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css" ><link rel="stylesheet" href="static/infocard.css" >
+        </head>
+    <body>
+      <div class="topright">
+            {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a>
+          {% endif %}
+            </div>
+          </div></div>
+          <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
+
+          {{render('menu.html', **globals()) | safe}}
+      <center><div>
+      <div class="rotating-text">
+        <p class="whitetext">The Resource Center </p>
+        <p>
+          <span class="word alizarin">finds.</span>
+          <span class="word wisteria">creates.</span>
+          <span class="word peter-river">simplifies.</span>
+        </p></div></div>
+      </center>
+<!-- Page actually starts here -->
+          <div style="top:150px; position:absolute;"><h1 id="about">Focused Search: </h1>
+          <form action='/fsearch' method="post">
+                <!-- Grade Select -->
+                <label><b>Select Grades to search for:</b></label>
+                {% for grade in grades %}
+                <input type="checkbox" value="{{ grade }}" name="{{ grade }}">{{ grade }}</option>
+                {% endfor %}
+            
+                
+                <br>
+                <label><b>Select Resource Subject:</b></label>
+                <br>
+                <!-- Subject Select -->
+                {% for subject in broad_subjects %}
+                <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="{{ subject }}" onclick="update_children(this)"><label for="{{ subject }}">{{ subject }}</label><br>
+                {% for x, sub_subject in enumerate(broad_subjects[subject]) %}
+                <input type="checkbox" id="{{ subject + str(x)}}" name="{{ sub_subject }}" style="margin-left: 5vh;" onclick="update_parent(this)"><label for="{{ sub_subject }}">{{ sub_subject }}</label><br>
+                {% endfor %}
+                {% endfor %}
+                <br>
+                <br>
+                <label><b>Select Resource Type:</b></label>
+                <select name="rtypes" id="rtypes">
+                {% for type in rtypes %}
+                <option value="{{ type }}">{{ type }}</option>
+                {% endfor %}
+                </select>
+                <input type="submit" value="Search">
+                <div class="card-container">
+                  {% if len(results) %}
+                  
+                    {% for result in results %}
+                        <div class="card">
+                            <h2>{{ result[1][1] }}</h2>
+                            {% for i in [result[0]] + result[2:] %}
+                                <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                  {% elif query %}
+                  No results
+                  {% endif %}
+                </div></div>
+        </form></div></div>
+          
+
+                
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/reloadplpc.js"></script>
+                <script src="static/autoscroll.js"></script><script src="static/sliders.js"></script><script src="static/map.js"></script><script src="static/fsearchautoselect.js"></script>
+            </body>
+                </script>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>updateslider()</script>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css" >
+        </head>
+    <body>
+      <div class="topright">
+        <div class="dropdown">
+          {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a></div>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a></div>
+          {% endif %}
+
+          
+          </div></div>
+          <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
+          
+          {{render('menu.html', **globals()) | safe}}
+      <center><div>
+      <div class="rotating-text">
+        <p class="whitetext">The Resource Center </p>
+        <p>
+          <span class="word alizarin">personalizes.</span>
+          <span class="word wisteria">counsels.</span>
+          <span class="word peter-river">inspires.</span>
+          <span class="word emerald">explains.</span>
+          <span class="word alizarin">finds.</span>
+          <span class="word wisteria">creates.</span>
+          <span class="word peter-river">simplifies.</span>
+        </p></div></div>
+      </center>
+      <form action='/suggest' method="post">
+        <br><br><br><br><br><br>
+        <p>Resource Type: </p><input type="text" name="rtype"><br>
+        <p>Resource Name: </p><input type="text" name="rname"><br>
+        <p>Subjects (Separated by commas): </p><input type="text" name="rsubjects"><br>
+        <input type="range" id="minage" name="minage" min="0" max="99" value="0" step="1" onclick="updateslider()">
+        <label for="minage" id="minagel">
+            
+        </label>
+        <br>
+        <input type="range" id="maxage" name="maxage" min="0" max="99" value="99" step="1" onclick="updateslider()">
+        <label for="maxage" id="maxagel">
+            
+        </label></div>
+        <br>
+        <p>Organizer: </p><input type="text" name="org"><br>
+        <p>Brief Description: </p><input type="text" name="desc"><br>
+        <p>Link to website: </p><input type="text" name="url">
+        <input type="submit" value="Submit as Suggestion">
+    </form>
+          
+                
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/sliders.js"></script><script>updateslider()</script>
+        </body>
+</html>

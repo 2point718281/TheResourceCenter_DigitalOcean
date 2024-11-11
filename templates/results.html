@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+    <head><link rel="stylesheet" href="static/styles.css">
+        <script src="static/sliders.js"></script></head>
+        <body><center><h1>Contest Database</h1></center>
+            <form onclick="results()">
+                <element class="grid-container">
+                    <div class="item1">
+                    <input type="text" name="q" placeholder="Enter search term" style="font-size: 30px;">
+                        <input type="submit" value="Search" style="font-size: 30px;" onclick="results()">
+                    <br><b>Only use the textbox if you have a particular contest in mind. Otherwise use the other filters.</b></div>
+                    
+                    <div class="item3">
+                    <input type="range" id="minage" name="minage" min="0" max="12" value="{}" step="1" onclick="updateslider()">
+                    <label for="minage" id="minagel">
+                        Minimum Grade: K
+                    </label>
+                    <br>
+                    <input type="range" id="maxage" name="maxage" min="0" max="12" value="{}" step="1" onclick="updateslider()">
+                    <label for="maxage" id="maxagel">
+                        Maximum Grade: 12
+                    </label></div>
+                    <br>
+                    <div class="item4">{}</div>
+            </div><div class="item2">{}</div></element>
+            <br>
+        </form></element>
+        </body>
+
+</html>

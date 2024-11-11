@@ -22,6 +22,7 @@ except ImportError:
 functionalities = {"search": True, "plp": False}
 show_raw_search = True
 
+import env
 import os
 import logging
 import base64

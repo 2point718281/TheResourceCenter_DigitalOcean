@@ -1,0 +1,7 @@
+reportlab
+flask
+beautifulsoup4
+requests
+transformers
+torch
+dotenv

@@ -1,0 +1,349 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:600);
+
+/* Most animations are from https://blog.hubspot.com/website/css-animation-examples */
+
+:root {
+  /* color-scheme: light dark; */
+  --text-color: #000000;
+  --accent-color: light-dark(#00F0FF, #6488EA);
+  --bg-color: light-dark(#c8c8c8, rgb(33, 33, 33));
+  --highlight: light-dark(#2381c0, #d1a61a);
+}
+html {
+  height: 500vh;
+  background: linear-gradient(rgb(251, 143, 83) 0%, rgb(143, 84, 152) 2.4%, rgb(255, 255, 255) 2.4%, rgb(255, 255, 255) 100%);
+  
+}
+.text {
+  text-align: left;
+  color: var(--text-color)
+}
+
+.whitetext {
+  color: rgb(255, 255, 255);
+}
+
+.about {
+  font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  font-size: 16px;
+  display: inline-block;
+  width: 50vw;
+  text-align: left;
+  left: 25vw;
+  line-height: 1.5em;
+  margin: auto auto;
+}
+
+p {
+  text-align: left;
+  color: var(--text-color)
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: vw/4 vw/4 vw/4 vw/4;
+  gap: 10px;
+  background-color: var(--bg-color);
+  padding: 10px;
+}
+
+.grid-container > div {
+  background-color: var(--accent-color);
+  text-align: left;
+  padding: 20px;
+  font-size: 30px;
+}
+
+.item1 {
+    float: left;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+  
+}
+
+.item3 {
+  float: left;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  grid-column-start: 1;
+  grid-column-end: 2;
+
+}
+.item4 {
+  float: left;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 3;
+
+}
+
+.item2 {
+  float: left;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 3;
+  grid-column-end: 5;
+
+}
+
+.menu a {
+  font-weight: bold;
+  color: var(--text-color);
+  margin: 0px;
+  background: var(--bg-color);
+}
+
+.menu a.selected {
+  font-weight: bold;
+  color: var(--text-color);
+  margin: 0px;
+  background: var(--highlight);
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+#map { height: 180px; }
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--bg-color);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: var(--text-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: var(--accent-color)}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: var(--highlight);
+}
+
+.centered {
+  position: absolute;
+  left: var(--screen-x) / 2;
+  top: 50%;
+  transform: translate(0, -50%)
+}
+
+.topleft, .topright {
+  position: absolute;
+  top: 10px;
+  z-index: 10; /* Ensure both elements are on the same layer */
+}
+
+.topleft {
+  left: 10px;
+}
+
+.topright {
+  right: 10px;
+}
+
+@keyframes float {
+	0% {
+		box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+		transform: translatey(0px);
+	}
+	50% {
+		box-shadow: 0 25px 15px 0px rgba(0,0,0,0.2);
+		transform: translatey(-20px);
+	}
+	100% {
+		box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+		transform: translatey(0px);
+	}
+}
+
+.logo {
+	width: 150px;
+	height: 150px;
+	box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+	transform: translatey(0px);
+	animation: float 6s ease-in-out infinite;
+	img { width: 100%; height: auto; }
+}
+
+.mainmenu {
+  position: absolute;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333333;
+  top: 120px;
+  width: --screen-x;
+}
+
+/* Style the dropdown */
+
+
+
+.menuelement {
+  float: left;
+}
+
+.menuelement a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+
+
+.menuelement a:hover {
+  background-color: #111111;
+}
+/* for rotating letters for the homepage */
+
+
+
+.rotating-text {
+  font-family: Lato, sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  color: white;
+  position: relative;
+  
+
+  p {
+    display: inline-flex;
+    margin: 0;
+    vertical-align: top;
+
+    .word {
+      position: absolute;
+      display: flex;
+      opacity: 0;
+
+      .letter {
+        transform-origin: center center 25px;
+
+        &.out {
+          transform: rotateX(90deg);
+          transition: 0.32s cubic-bezier(0.6, 0, 0.7, 0.2);
+        }
+        &.in {
+          transition: 0.38s ease;
+        }
+        &.behind {
+          transform: rotateX(-90deg);
+        }
+      }
+    }
+  }
+}
+
+
+.alizarin {
+  color: #d31c8d;
+}
+
+.wisteria {
+  color: #8e44ad;
+}
+
+.peter-river {
+  color: #3498db;
+}
+
+.emerald {
+  color: #2ecc71;
+}
+
+.sun-flower {
+  color: #f1c40f;
+}
+
+h1 {
+  color: var(--text-color);
+}
+
+@keyframes leftbeyond {
+  from { 
+    transform: translateX(-100vh);
+    opacity: 0;
+  }
+  to { 
+    transform: translateX(calc(0vh - 200%));
+    opacity: 1;
+  }
+  }
+
+@keyframes rightbeyond {
+    from { 
+      transform: translateX(calc(175vh));
+      opacity: 0;
+    }
+    to { 
+      transform: translateX(calc(75vh + 200%));
+      opacity: 1;
+    }
+    }
+
+@keyframes fade {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+.lbeyondcontainer {
+  position: absolute;
+  top: 0;
+  width: 200px;
+  animation-name: leftbeyond;
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+}
+
+.rbeyondcontainer {
+  position: absolute;
+  top: 0;
+  width: 200px;
+  animation-name: rightbeyond;
+  animation-duration: 4s;
+  animation-fill-mode: forwards;
+}
+
+.rightbeyond {
+  overflow-y: scroll;
+  top: vh;
+  right: -500px;
+}
+
+.leftbeyond {
+  overflow-y: scroll;
+  top: vh;
+  left: -1000px;
+}

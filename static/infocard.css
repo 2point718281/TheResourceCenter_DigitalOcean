@@ -1,0 +1,23 @@
+.card-container {
+    display: grid; /* Enable grid layout */
+    width: 100vw;
+    grid-template-columns: repeat(auto-fill, 334px); /* Responsive columns */
+    gap: 16px; /* Space between cards */
+    padding: 16px; /* Padding around the container */
+}
+.card {
+    border: 1px solid #ccc; /* Card border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Inner padding */
+    width: 300px; /* Card width */
+    background-color: #f9f9f9; /* Background color */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+}
+
+.card h2 {
+    margin-top: 0; /* Remove top margin for the heading */
+}
+
+.card p {
+    margin: 8px 0; /* Margin for paragraphs */
+}

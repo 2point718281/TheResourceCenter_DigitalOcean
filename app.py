@@ -22,12 +22,12 @@ except ImportError:
 functionalities = {"search": True, "plp": False}
 show_raw_search = True
 
-import env
 import os
-import logging
+import logging  
 import base64
 import socket
 import webbrowser
+import env # Environment Variables
 
 from flask import (
     Flask,
@@ -53,11 +53,11 @@ if functionalities["search"]:
 
 # Initialize logger
 logger = logging.getLogger(__name__)
-logging.basicConfig(file="TheResourceCenter.log", level=logging.INFO)
+logging.basicConfig(file='TheResourceCenter.log', level=logging.INFO)
 # loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
 # for logger in loggers:
 #     logger.propagate = False
-
+    
 # Variables
 dbs = {
     "Scholarship, Bursaries, and Awards": "/fsearch/sba",
@@ -66,13 +66,13 @@ dbs = {
     "Free Educational Resources": "/fsearch/fer",
     "Extracurriculars, Clubs, and Volunteer": "/fsearch/extra-clubs-volun",
 }
-"""topicchooser = "\n".join(
+'''topicchooser = "\n".join(
     [
         f'<input type="checkbox" id="{topic}" name="{topic}" value="True"><label for="{topic}">{topic}</label><br>'
         for topic in subjects
     ]
-)"""
-topicchooser = ""
+)'''
+topicchooser = ''
 
 
 # Feature toggle settings
@@ -80,7 +80,7 @@ functionalities = {"search": True, "plp": False}
 
 
 # Helper function to load HTML templates
-def load_template(file_name):
+def load_template(file_name, mode = 'r'):
     """
     Load the HTML template from the templates directory.
 
@@ -89,8 +89,11 @@ def load_template(file_name):
     :return: Contents of the HTML file.
     """
     file_path = os.path.join("templates", file_name)
-    with open(file_path, "r") as file:
-        return file.read()
+    with open(file_path, mode) as file:
+        read = file.read()
+        if mode[-1] == 'b':
+            read = read.decode()
+        return read
 
 
 # Create Flask app
@@ -285,6 +288,11 @@ def index():
         "index.html", reviewsleft=reviewsleft, reviewsright=reviewsright
     )
 
+def vision():
+    return render_template('vision.html')
+
+def founder():
+    return render_template('founder.html')
 
 def suggestions():
     """
@@ -297,6 +305,8 @@ def suggestions():
 
 # Add home route
 home_section.add("/", index, "Home page route")
+home_section.add("/founder", founder, "Founder's corner route")
+home_section.add("/vision", vision, "Vision and Impact route")
 home_section.add("/suggestions", suggestions, "Suggestion box route")
 
 # Additional sections such as Search and PLP generation could be added here
@@ -325,9 +335,7 @@ if functionalities["search"]:
             rtype = request.form.get("rtype", False)
             minage = int(request.form.get("minage", 0))
             maxage = int(request.form.get("maxage", 99))
-            all_subjects = set(broad_subject_mapping.keys()).union(
-                *[set(broad_subject_mapping[key]) for key in broad_subject_mapping]
-            )
+            all_subjects = set(broad_subject_mapping.keys()).union(*[set(broad_subject_mapping[key]) for key in broad_subject_mapping])
             subjects_truefalse = {
                 subject: bool(request.form.get(subject, False))
                 for subject in all_subjects
@@ -336,31 +344,18 @@ if functionalities["search"]:
                 [subject for subject in all_subjects if subjects_truefalse[subject]]
             )
             rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
-            ages = set(
-                [i for i in range(1, 13) if bool(request.form.get(str(i), False))]
-            )
+            ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
             if ages and subjects_ and rtypes_:
                 return render_template(
                     "fsearch.html",
                     results=broad.search_specific(
-                        query="",  # We are not using queries for focused search right now
+                        query='',   # We are not using queries for focused search right now
                         ages=ages,
                         subjects_=subjects_,
                         rtypes=rtypes_,
-                    ),
-                    broad_subjects=broad_subject_mapping,
-                    rtypes=rtypes,
-                    query="",
-                    grades=list(range(1, 13)),
+                    ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
                 )
-        return render_template(
-            "fsearch.html",
-            results=[],
-            broad_subjects=broad_subject_mapping,
-            rtypes=rtypes,
-            query="",
-            grades=list(range(1, 13)),
-        )
+        return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
 
     # Add search routes to Search Section
     search_section.add("/bsearch", broadsearch, "Broad search route", ["GET", "POST"])
@@ -414,7 +409,7 @@ if functionalities["plp"]:
     plp_section.add("/plp/view/<filename>/status", plpstatus, "PLP status route")
     plp_section.add("/plp/view/<filename>", viewplp, "View generated PLP route")
 
-"""
+'''
 if __name__ == '__main__':
     print(section_manager)
     # Define host and port
@@ -427,10 +422,10 @@ if __name__ == '__main__':
 
     # Run the Flask application
     app.run(host=host, port=port, debug=True)
-"""
+'''
 
 if __name__ == "__main__":
-    host, port = "0.0.0.0", 8000
+    host, port = "0.0.0.0", 80
     actual_host = (
         socket.gethostbyname(socket.gethostname()) if host == "0.0.0.0" else host
     )

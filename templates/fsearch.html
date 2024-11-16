@@ -70,10 +70,11 @@
                   
                     {% for result in results %}
                         <div class="card">
-                            <h2>{{ result[1][1] }}</h2>
-                            {% for i in [result[0]] + result[2:] %}
-                                <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
-                            {% endfor %}
+                          <h2>{{ result[1][1] }}</h2>
+                          {% for i in [result[0]] + result[2:-1] %}
+                              <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                          {% endfor %}
+                          <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}">{{ result[-1][1] }}</a></p>
                         </div>
                     {% endfor %}
                   {% elif query %}

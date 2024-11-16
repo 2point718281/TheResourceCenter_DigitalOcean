@@ -19,7 +19,7 @@ except ImportError:
     install_module("Flask")
 
 # Set functionalities to control the feature toggles
-functionalities = {"search": True, "plp": False}
+functionalities = {"search": True, "plp": True}
 show_raw_search = True
 
 import os

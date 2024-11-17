@@ -8,7 +8,13 @@ import datetime
 import nltk
 import numpy as np
 from NLP.vector import compile_semantics
+from NLP.preprocessing import default as preprocess, noround as preprocess_database, tokenize
+import NLP.preprocessing as prep
 import json
+import tqdm
+import math
+import string
+
 
 # Download necessary NLTK resources
 try:
@@ -19,7 +25,7 @@ except LookupError:
     nltk.download("stopwords")
 
 # Set up logging for debugging
-logging.basicConfig(encoding="utf-8", level=logging.DEBUG)
+logging.basicConfig(filename='TheResourceCenter.log', encoding="utf-8", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info("LOGGER ACTIVATED")
 
@@ -27,10 +33,16 @@ logger.info("LOGGER ACTIVATED")
 def split(string):
     return string.split()
 
+def splitalong(stuff_to_splitover, string):
+    for i in stuff_to_splitover[1:]:
+        string = string.replace(i, ' ')
+    return string.split(' ')
+
 
 # CSV Filename for database
-broad_filename = "Curated_DatabaseV4.csv"
+broad_filename = "Curated_DatabaseV6.csv"
 broad_subject_mapping_file = "broadsubjectmappings.json"
+raw = True
 
 with open(os.path.join("static", "data", broad_subject_mapping_file)) as f:
     mappings = json.loads(f.read())
@@ -81,7 +93,9 @@ def remove_punctuation(s):
     :return: String with all punctuation removed.
     """
     logger.debug(f"Removing punctuation from string: {s}")
-    return s.translate(str.maketrans("", "", string.punctuation))
+    for char in string.punctuation:
+        s.replace(char, ' ')
+    return s
 
 
 def checklinks(file, link_index):
@@ -135,9 +149,25 @@ def determine_approx_rating(qlen):
     """
     m, b = (
         9.7443125,
-        -6.612125,
+        -1008.612125,
     )  # Use the precomputed linear regression to find the required rating.
     return m * qlen + b
+
+def stringify(iter_):
+    t = str(type(iter_)).split("'")[1]
+    if t == 'str':
+        return iter_
+
+    if t == 'dict':
+        return stringify(list(iter_.keys())) + ' ' + stringify(list(iter_.values()))
+
+    if t == 'list':
+        return ' '.join([stringify(_) for _ in iter_])
+
+    if t in ('float', 'int'):
+        return str(t)
+
+    return t
 
 
 def rating_to_word(qlen, rating):
@@ -214,12 +244,9 @@ class BroadDatabase:
             with open(file, newline="\n") as f:
                 reader = csv.reader(f)
                 data = [row for row in reader]
-                self.focused_titles = [i.strip().replace("/ ", "/") for i in data[0]][
-                    :-1
-                ]  # The titles are in the first row
-                self.titles = self.focused_titles[:10]
+                self.titles = [i.strip().replace("/ ", "/") for i in data[0]]  # The titles are in the first row
                 self.data = [
-                    row[:-1] for row in data[1:]
+                    row for row in data[1:]
                 ]  # All the other rows are data
         except FileNotFoundError as e:
             logger.error(f"Error loading CSV file: {e}")
@@ -231,9 +258,8 @@ class BroadDatabase:
             words="all",
             format_="json",
         )
-
+        self.popular = {}
         self.clean_data()  # Clean up the data
-        self.words = self.extract_words()  # Extract words for TF-IDF
         self.relevant = (
             0,
             1,
@@ -243,26 +269,55 @@ class BroadDatabase:
             8,
             9,
         )  # Indices of relevant columns that should be shown to the user
-        self.types = (
-            str,
-            str,
-            list,
-            str,
-            str,
-            str,
-            str,
-            str,
-            str,
-            str,
-            list,
-        )  # Expected data types for each column
+        self.types = (str, str, list, str, str, str, str, str, str, str, int, int, str, str, dict, str, str, list, list)  # Expected data types for each column
+        override_terms = [
+            "scholarship",
+            "financial aid",
+            "leadership",
+            "community service",
+            "post-secondary education",
+            "British Columbia",
+            "STEM",
+            "career development",
+            "mentorship",
+            "personal growth",
+            "cultural exchange",
+            "critical thinking",
+            "creativity",
+            "problem-solving",
+            "extracurricular",
+            "application-based",
+            "academic achievement",
+            "youth empowerment",
+            "environmental education",
+            "civic engagement",
+            "arts education",
+            "educational resources",
+            "online learning",
+            "interactive learning",
+            "community involvement",
+            "higher education",
+            "mathematics",
+            "science",
+            "technology",
+            "engineering",
+            "mathematics competitions",
+            "academic excellence",
+            "service learning",
+            "K-12 education",
+            "teacher resources",
+            "social responsibility"
+        ]
+        override_terms = sum([i.split() for i in override_terms], start = [])
+
         self.idfs = {
-            i: self.words.count(i) for i in set(self.words)
+            i: (math.log(len(self.data) / sum([(i in j) for j in self.data_preprocessed]), 2) if i not in override_terms else 1) for i in set(self.words)  # The denominator is slightly different than an exact copy of TF-IDF. This is for simplicity.
         }  # Calculate inverse document frequency for words
         self.titles.append("")
         logger.info(
             f"BroadDatabase initialized successfully with {len(self.data)} rows of data"
         )
+        prep.words += self.words
 
     def clean_data(self):
         """
@@ -273,7 +328,10 @@ class BroadDatabase:
         """
         logger.info("Cleaning data")
         cleaned_data = []
-        for i in self.data:
+        self.words = []
+        self.relevant = 0, 1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17
+
+        for x, i in enumerate(self.data):
             try:
                 # Process the subject field
                 i[2] = i[2].split(", ")
@@ -309,30 +367,34 @@ class BroadDatabase:
 
                 except Exception:
                     pass
+                
+                i[-1] = sum([j.split(' ') for j in i[-1].split(', ')], start = [])
+            except Exception as e:
+                # Log any errors that occur during data cleaning
+                print(e)
+                logger.warning(f"Deleting row {i} due to error: {e}")
 
+        for x, i in enumerate(self.data):
+            try:
                 # Add semantic vector for the entire row by summing the vectors for each word
-                words = " ".join(
-                    [
-                        str(element)
-                        if isinstance(element, (str, int))
-                        else " ".join([str(e) for e in element])
-                        for element in i
-                    ]
-                )
-                words = words.split()
-                ls = [self.semantic.get(word, [0] * 50) for word in words]
+                self.words = list(self.extract_words())
+                words = self.data_preprocessed[x]
+                self.words.extend(words)
+                for word in words:
+                    self.popular[word.lower().strip(',./;[]\\-=~!@#$%^&*()(')] = self.popular.get(word.lower().strip(',./;[]\\-=~!@#$%^&*()('), 0) + 1
+                ls = [self.semantic.get(word, [0] * 50) for word in words if word in self.semantic]
                 i.append(np.array(ls).sum(axis=0).tolist())
                 cleaned_data.append(i)
                 logger.debug(f"Row cleaned successfully: {i}")
             except Exception as e:
                 # Log any errors that occur during data cleaning
+                print(e)
                 logger.warning(f"Deleting row {i} due to error: {e}")
-        self.focused_data = cleaned_data
-        self.data = [row[:10] + [row[-1]] for row in self.focused_data]
+        self.data = cleaned_data
         logger.info(
             f"Data cleaning completed. Cleaned data contains {len(self.data)} rows"
         )
-
+        
     def extract_words(self):
         """
         Extract all words from the dataset for further analysis.
@@ -340,19 +402,13 @@ class BroadDatabase:
         :return: List of words extracted from the dataset.
         """
         logger.info("Extracting words from data")
-        words = []
-        for i in self.data:
-            for j in i:
-                if isinstance(j, list):
-                    if isinstance(j[0], (int, float)):
-                        continue
-                    words.extend([n.lower() for n in j])
-                else:
-                    # Remove punctuation and convert string to lowercase
-                    cleaned_str = remove_punctuation(j).lower()
-                    words.extend(cleaned_str.split())
-        logger.info(f"Extracted {len(words)} words from the dataset")
-        return words
+        all_string = [preprocess_database(stringify([entry[index] for index in self.relevant])) for entry in self.data]
+        self.data_preprocessed = all_string
+        # Remove punctuation from and convert all strings to lowercase so that we can add them to the word list
+        cleaned = sum(all_string, start = tuple())
+        
+        logger.info(f"Extracted {len(cleaned)} words from the dataset")
+        return cleaned
 
     def determine_tfidf(self, string_, id_or_contest):
         """
@@ -363,51 +419,27 @@ class BroadDatabase:
         :return: The TF-IDF score for the given query.
         """
         logger.debug(f"Calculating TF-IDF for query: {string_}")
-        # Remove punctuation and stopwords from the search query
-        string_ = remove_punctuation(string_).lower()
-        string_ = [
-            word
-            for word in string_.split()
-            if word not in nltk.corpus.stopwords.words("english")
-        ]
 
         # Determine which dataset to compare against - either by index or by direct input
         if isinstance(id_or_contest, int):
-            test = [
-                elem.lower()
-                if isinstance(elem, str)
-                else [sub_elem.lower() for sub_elem in elem]
-                for elem in self.data[id_or_contest][:-2]
-            ]
+            testindex = id_or_contest
         else:
-            test = [
-                elem.lower()
-                if isinstance(elem, str)
-                else [sub_elem.lower() for sub_elem in elem]
-                for elem in id_or_contest[:-2]
-            ]
+            testindex = self.data.index(id_or_contest)
 
-        test = [_ for _ in test if _]
+        test = self.data_preprocessed[testindex]
 
         # Calculate the TF-IDF score for each word in the query
         tfidf = 0
+        additions = []
         for word in string_:
-            tfidf += max(
-                [
-                    self.idfs.get(word, 1)
-                    * element.count(word)
-                    / len(element)
-                    * len(word)
-                    if isinstance(element, str)
-                    else self.idfs.get(word, 1)
-                    * max([sub_elem.count(word) for sub_elem in element])
-                    / len("".join(element))
-                    * len(word)
-                    for element in test
-                ]
-            )
+            add = test.count(word) / len(test) * self.idfs.get(word, 1 / len(self.data))
+            tfidf += add
+            additions.append(add)
 
-        logger.debug(f"TF-IDF score for query '{string_}': {tfidf}")
+        if all(additions): # if all words appeared in the resource
+            tfidf = float('inf')
+
+        logger.debug(f"TF-IDF score for query '{string_}' on document '{test}': {tfidf}")
         return tfidf
 
     def determine_semantic(self, string, result):
@@ -420,10 +452,10 @@ class BroadDatabase:
         """
         # Convert the semantic vectors to numpy arrays
         semantic_r = np.array(result[-1])
-        ls = [self.semantic.get(word, [0] * 50) for word in string.split()]
+        ls = [self.semantic.get(word, [0] * 50) for word in string if word in self.semantic]
         semantic_s = np.array(ls).sum(axis=0)
-
         # Calculate cosine similarity between the search vector and the result vector
+        # print(semantic_r, semantic_s)
         similarity_score = (
             np.dot(semantic_r, semantic_s)
             / (np.linalg.norm(semantic_r) * np.linalg.norm(semantic_s))
@@ -435,13 +467,9 @@ class BroadDatabase:
         return similarity_score
 
     def determine_tfidfstring(self, string, x):
-        words = split(string)
-        return sum(
-            [
-                self.determine_tfidf(word, x) * self.determine_semantic(word, x)
-                for word in words
-            ]
-        ) / len(words)
+        words = string
+        return self.determine_tfidf(words, x) * self.determine_semantic(words, x) / len(words)
+                
 
     def _search(self, string="", subset=None, raw=False):
         """
@@ -456,9 +484,13 @@ class BroadDatabase:
             subset = self.data.copy()
 
         # Calculate scores for each entry in the subset using TF-IDF and semantic similarity
-        qlen = len(split(string))
-        required_score = determine_approx_rating(qlen)
+        string = preprocess(string)
+        if 'competitions' in string:
+            string = tuple([i.replace('competition', 'contest') for i in string])
+        qlen = len(string)
+        required_score = 0 # determine_approx_rating(qlen)
         scores = [self.determine_tfidfstring(string, x) for x in subset]
+        # print(sorted(zip(scores, subset), key=lambda x: x[0], reverse=True))
         # Sort the results by score in descending order and return those that match the threshold
         search_results = [
             i
@@ -468,20 +500,17 @@ class BroadDatabase:
 
         if raw:
             res = [
-                (
-                    (i[0], i[1][:-1] + [search_results[x][0], i[1][-1]]),
-                    position_as_word(x, len(search_results)),
-                )
+                    ((i[1][:-1] + [i[0]] + [i[1][-1]]), position_as_word(x, len(search_results)))
                 for x, i in enumerate(search_results)
             ]
 
         else:
             res = [
-                (i, position_as_word(x, len(search_results)))
+                (i[0], position_as_word(x, len(search_results)))
                 for x, i in enumerate(search_results)
             ]
         logger.info(f"Search completed. Found {len(search_results)} matching results")
-        return res
+        return res # search_results
 
     def convert(self, result, raw, rating=None):
         """
@@ -491,15 +520,30 @@ class BroadDatabase:
         :return: Converted result in a readable format.
         """
         logger.debug(f"Converting result: {result}")
-        result = result[:-1]
+        result = result
+        human_relevant = 1, 0, 2, 4, 5, 6, 7, 13, 14, 15, 9
+        def conv(type_, s):
+            if type_ == str:
+                return ' '.join([i.capitalize() for i in s.strip(''.join([i for i in string.punctuation if i not in '()'])).split()]).replace('aops', 'AoPS') # Add special tokens here
+
+            if type_ == list:
+                return str(s)[1:-1].replace("'", "")
+
+            if type_ == dict:
+                return ', '.join([str(i) for i in s.keys()])
+
+            if type_ in (float, int):
+                if str(s) == 'inf':
+                    return '∞'
+
+                return str(s)
+            
         r = [
-            (self.titles[i], result[i])
-            if self.types[i] == str
-            else (self.titles[i], str(result[i])[1:-1].replace("'", ""))
-            for i in self.relevant
+            (conv(str, self.titles[i]), conv(self.types[i], result[i]))
+            for i in human_relevant
         ]
         if raw:
-            r.insert(-1, ("Raw Rating", result[10]))
+            r.insert(-1, ("Raw Rating", result[-2]))
         # Process the age range to ensure correct formatting in the output
 
         if rating is not None:
@@ -521,7 +565,8 @@ class BroadDatabase:
         )
         filtered = self._search(string, None, raw)
         # Convert results to a human-readable format and return
-        results = [self.convert(i[0][1], raw, i[1]) for i in filtered[:num_res]]
+        print(filtered[0])
+        results = [self.convert(i[0], raw, i[1]) for i in filtered[:num_res]]
         logger.info(f"Search completed. Returning {len(results)} results")
         return results
 
@@ -555,7 +600,7 @@ class BroadDatabase:
         # Match by subject and resource type
         filtered = [
             i
-            for i in self.focused_data
+            for i in self.data
             if get_relevant_subjects(i).intersection(all_subjects)
         ]
 
@@ -606,7 +651,18 @@ class BroadDatabase:
 broad = BroadDatabase(os.path.join("static", "data", broad_filename))
 
 
+
 # Uncomment to identify semantic information
 # print('Compiling semantics...')
-# compile_semantics('semantics.json', os.path.join('static', 'semantics', 'glove.6B.50d.txt'), words='all', format_='json')
+'''all_ = compile_semantics(
+            "return",
+            os.path.join("static", "semantics", "glove.6B.50d.txt"),
+            words=broad.words,
+            format_="json",
+        )'''
+
+'''with open('minimised_glove.txt', 'w') as f:
+    for entry in all_:
+        if sum(all_[entry]):
+            f.write(entry + ' ' + ' '.join([str(i) for i in all_[entry]]) + '\n')'''
 # print('Done')

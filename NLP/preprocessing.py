@@ -277,7 +277,7 @@ expandacros = Filter(expand_all_acronyms, 'Expand all acronyms to their full for
 
 ## Predefined FilterLists
 
-def get_filter(lower_ = True, upper_ = False, rmpunct = True, tokenize_ = True, rmstop = True, expand = True, lemma = True, round_close = True, autocache = True):
+def get_filter(lower_ = True, upper_ = False, rmpunct = True, tokenize_ = True, rmstop = True, expand = True, lemma = True, round_close = True):
     filters = []
     if lower_:
         filters.append(lower)

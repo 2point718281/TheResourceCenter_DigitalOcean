@@ -1,9 +1,7 @@
-flask
-torch
 reportlab
+flask
+beautifulsoup4
 requests
-dotenv
 transformers
-requests
-nltk
-waitress
+torch
+dotenv

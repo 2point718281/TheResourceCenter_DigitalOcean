@@ -107,7 +107,7 @@ def compile_semantics(filename, source, words="all", format_="sql"):
         logger.error(f"Error opening GloVe file: {e}")
         return
 
-    if words.lower() == "all":
+    if isinstance(words, str) and words.lower() == "all":
         words = [word.lower() for word in semantics]
 
     if format_ == "json" or filename == "return":

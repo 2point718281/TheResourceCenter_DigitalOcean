@@ -302,12 +302,15 @@ def suggestions():
     """
     return render_template("suggestions.html")
 
+def ico():
+    return send_file(os.path.join('static', 'theresourcecenterlogo.ico'))
 
 # Add home route
 home_section.add("/", index, "Home page route")
 home_section.add("/founder", founder, "Founder's corner route")
 home_section.add("/vision", vision, "Vision and Impact route")
-home_section.add("/suggestions", suggestions, "Suggestion box route")
+home_section.add("/contact", suggestions, "Suggestion box route")
+home_section.add("/favicon", ico, "Suggestion box route")
 
 # Additional sections such as Search and PLP generation could be added here
 # based on feature toggles (functionalities).
@@ -331,86 +334,82 @@ if functionalities["search"]:
 
         :return: Flask response object.
         """
-        try:
-            if request.method == "POST":
-                rtype = request.form.get("rtype", False)
-                minage = int(request.form.get("minage", 0))
-                maxage = int(request.form.get("maxage", 99))
-                all_subjects = set(broad_subject_mapping.keys()).union(*[set(broad_subject_mapping[key]) for key in broad_subject_mapping])
-                logger.info('ALL SUBJECTS: ', all_subjects)
-                subjects_truefalse = {
-                    subject: bool(request.form.get(subject, False))
-                    for subject in all_subjects
-                }
-                subjects_ = set(
-                    [subject for subject in all_subjects if subjects_truefalse[subject]]
+        if request.method == "POST":
+            rtype = request.form.get("rtype", False)
+            minage = int(request.form.get("minage", 0))
+            maxage = int(request.form.get("maxage", 99))
+            all_subjects = set(broad_subject_mapping.keys()).union(*[set(broad_subject_mapping[key]) for key in broad_subject_mapping])
+            logger.info('ALL SUBJECTS: ', all_subjects)
+            subjects_truefalse = {
+                subject: bool(request.form.get(subject, False))
+                for subject in all_subjects
+            }
+            subjects_ = set(
+                [subject for subject in all_subjects if subjects_truefalse[subject]]
+            )
+            rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
+            ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
+            if ages and subjects_ and rtypes_:
+                return render_template(
+                    "fsearch.html",
+                    results=broad.search_specific(
+                        query='',   # We are not using queries for focused search right now
+                        ages=ages,
+                        subjects_=subjects_,
+                        rtypes=rtypes_,
+                    ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
                 )
-                rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
-                ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
-                if ages and subjects_ and rtypes_:
-                    return render_template(
-                        "fsearch.html",
-                        results=broad.search_specific(
-                            query='',   # We are not using queries for focused search right now
-                            ages=ages,
-                            subjects_=subjects_,
-                            rtypes=rtypes_,
-                        ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
-                    )
-            return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
+        return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
 
-        except Exception as e:
-            return str('Error occured: ', e)
 
     # Add search routes to Search Section
     search_section.add("/bsearch", broadsearch, "Broad search route", ["GET", "POST"])
     search_section.add("/fsearch", focusedsearch, "Focused search route", ["GET", "POST"])
 
 # PLP Section
-if functionalities["plp"]:
-    plp_section = section_manager.add_section("PLP Generation")
+plp_section = section_manager.add_section("PLP Generation")
 
-    def plp_():
-        return "This feature is under development!"
-        if request.method == "POST":
-            session["plpname"] = request.form.get("name")
-            filename = os.path.join(
-                "plps", remove_punc(session["plpname"]).replace(" ", "_") + "_PLP.pdf"
+def plp_():
+    return render_template("plpcomingsoon.html")
+    if request.method == "POST":
+        session["plpname"] = request.form.get("name")
+        filename = os.path.join(
+            "plps", remove_punc(session["plpname"]).replace(" ", "_") + "_PLP.pdf"
+        )
+        with open(os.path.join("static", "reloadplp.js")) as code:
+            js = code.read()
+
+        with open(os.path.join("static", "reloadplpc.js"), "w") as code:
+            code.write(
+                'const file = "plp/view/'
+                + remove_punc(session["plpname"]).replace(" ", "_")
+                + '_PLP.pdf";'
+                + js
             )
-            with open(os.path.join("static", "reloadplp.js")) as code:
-                js = code.read()
 
-            with open(os.path.join("static", "reloadplpc.js"), "w") as code:
-                code.write(
-                    'const file = "plp/view/'
-                    + remove_punc(session["plpname"]).replace(" ", "_")
-                    + '_PLP.pdf";'
-                    + js
-                )
+        plp.generate_plp(filename, request.form)
+        resp = make_response(render_template("view.html"), 200)
+        resp.set_cookie("can_view", filename, httponly=True)
+        return resp
+    return render_template("plp.html", questions=plpform.html)
 
-            plp.generate_plp(filename, request.form)
-            resp = make_response(render_template("view.html"), 200)
-            resp.set_cookie("can_view", filename, httponly=True)
-            return resp
-        return render_template("plp.html", questions=plpform.html)
+def plpstatus(filename):
+    status_file = os.path.join("plps", filename.replace("_PLP.pdf", "_status.txt"))
+    if os.path.exists(status_file):
+        with open(status_file) as f:
+            return f.read().strip()
+    return make_response("<h1>404 Not Found</h1>", 404)
 
-    def plpstatus(filename):
-        status_file = os.path.join("plps", filename.replace("_PLP.pdf", "_status.txt"))
-        if os.path.exists(status_file):
-            with open(status_file) as f:
-                return f.read().strip()
-        return make_response("<h1>404 Not Found</h1>", 404)
+def viewplp(filename):
+    filepath = os.path.join("plps", filename)
+    if os.path.exists(filepath):
+        return send_file(filepath, as_attachment=False)
+    return make_response("<h1>404 Not Found</h1>", 404)
 
-    def viewplp(filename):
-        filepath = os.path.join("plps", filename)
-        if os.path.exists(filepath):
-            return send_file(filepath, as_attachment=False)
-        return make_response("<h1>404 Not Found</h1>", 404)
-
-    # Add PLP routes to PLP Section
-    plp_section.add("/plp", plp_, "PLP generation route", ["GET", "POST"])
-    plp_section.add("/plp/view/<filename>/status", plpstatus, "PLP status route")
-    plp_section.add("/plp/view/<filename>", viewplp, "View generated PLP route")
+# Add PLP routes to PLP Section
+plp_section.add("/plp", plp_, "PLP generation route", ["GET", "POST"])
+plp_section.add("/plp/view/<filename>/status", plpstatus, "PLP status route")
+plp_section.add("/plp/view/<filename>", viewplp, "View generated PLP route")
 
 
 if __name__ == '__main__':

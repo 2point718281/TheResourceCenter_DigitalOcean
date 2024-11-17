@@ -122,4 +122,4 @@ class SQLDatabase:
 
 
 # Set up default logging configuration
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename='TheResourceCenter.log', level=logging.DEBUG)

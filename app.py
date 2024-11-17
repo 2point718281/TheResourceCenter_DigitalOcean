@@ -53,7 +53,7 @@ if functionalities["search"]:
 
 # Initialize logger
 logger = logging.getLogger(__name__)
-logging.basicConfig(file='TheResourceCenter.log', level=logging.INFO)
+logging.basicConfig(filename='TheResourceCenter.log', level=logging.INFO)
 # loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
 # for logger in loggers:
 #     logger.propagate = False
@@ -331,37 +331,40 @@ if functionalities["search"]:
 
         :return: Flask response object.
         """
-        if request.method == "POST":
-            rtype = request.form.get("rtype", False)
-            minage = int(request.form.get("minage", 0))
-            maxage = int(request.form.get("maxage", 99))
-            all_subjects = set(broad_subject_mapping.keys()).union(*[set(broad_subject_mapping[key]) for key in broad_subject_mapping])
-            subjects_truefalse = {
-                subject: bool(request.form.get(subject, False))
-                for subject in all_subjects
-            }
-            subjects_ = set(
-                [subject for subject in all_subjects if subjects_truefalse[subject]]
-            )
-            rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
-            ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
-            if ages and subjects_ and rtypes_:
-                return render_template(
-                    "fsearch.html",
-                    results=broad.search_specific(
-                        query='',   # We are not using queries for focused search right now
-                        ages=ages,
-                        subjects_=subjects_,
-                        rtypes=rtypes_,
-                    ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
+        try:
+            if request.method == "POST":
+                rtype = request.form.get("rtype", False)
+                minage = int(request.form.get("minage", 0))
+                maxage = int(request.form.get("maxage", 99))
+                all_subjects = set(broad_subject_mapping.keys()).union(*[set(broad_subject_mapping[key]) for key in broad_subject_mapping])
+                logger.info('ALL SUBJECTS: ', all_subjects)
+                subjects_truefalse = {
+                    subject: bool(request.form.get(subject, False))
+                    for subject in all_subjects
+                }
+                subjects_ = set(
+                    [subject for subject in all_subjects if subjects_truefalse[subject]]
                 )
-        return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
+                rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
+                ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
+                if ages and subjects_ and rtypes_:
+                    return render_template(
+                        "fsearch.html",
+                        results=broad.search_specific(
+                            query='',   # We are not using queries for focused search right now
+                            ages=ages,
+                            subjects_=subjects_,
+                            rtypes=rtypes_,
+                        ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
+                    )
+            return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
+
+        except Exception as e:
+            return str('Error occured: ', e)
 
     # Add search routes to Search Section
     search_section.add("/bsearch", broadsearch, "Broad search route", ["GET", "POST"])
-    search_section.add(
-        "/fsearch", focusedsearch, "Focused search route", ["GET", "POST"]
-    )
+    search_section.add("/fsearch", focusedsearch, "Focused search route", ["GET", "POST"])
 
 # PLP Section
 if functionalities["plp"]:
@@ -409,7 +412,7 @@ if functionalities["plp"]:
     plp_section.add("/plp/view/<filename>/status", plpstatus, "PLP status route")
     plp_section.add("/plp/view/<filename>", viewplp, "View generated PLP route")
 
-'''
+
 if __name__ == '__main__':
     print(section_manager)
     # Define host and port
@@ -422,8 +425,8 @@ if __name__ == '__main__':
 
     # Run the Flask application
     app.run(host=host, port=port, debug=True)
-'''
 
+'''
 if __name__ == "__main__":
     host, port = "0.0.0.0", 80
     actual_host = (
@@ -431,3 +434,4 @@ if __name__ == "__main__":
     )
     webbrowser.open(f"http://{actual_host}:{port}")
     serve(app, host=host, port=port)
+'''

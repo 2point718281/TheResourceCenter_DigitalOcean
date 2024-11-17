@@ -10,7 +10,7 @@ import logging
 
 # Set up logging
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(file='TheResourceCenter.log', level=logging.INFO)
 
 # Load the encryption key from environment variable
 key = os.getenv("fernet").encode()

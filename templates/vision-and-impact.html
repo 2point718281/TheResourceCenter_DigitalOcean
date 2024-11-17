@@ -1,42 +1,116 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-	<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8" />
-	</head>
-	<body>
-			<p>
-				<strong>Our Vision</strong>
-			</p>
-			<p style="text-align:center">
-				<em>“every child can thrive”</em>
-			</p>
-			<p>
-				Every student has the potential to succeed, and at The Resource Center, we are committed to ensuring personalized learning is accessible to all. Inspired by local needs, our mission is to bridge the skill gaps observed across Canada and address the pressing productivity challenges by equipping students with the skills they need for the future.
-			</p>
-			<p>
-				<strong>Our Impact</strong>
-			</p>
-			<p>
-				Our initial surveys show a strong demand from parents and teachers who see immense value in the time and resource efficiency that The Resource Center brings. Additionally, studies indicate that tools like ours can significantly reduce teacher workload, enabling more one-on-one interaction with students and enriching the educational experience.
-			</p>
-			<center>
-				<img src="static\animated_rating.svg"/>
-			</center>
-			<p style="text-align:center; line-height:108%; font-size:12pt">
-				<em>Tested by parents, teachers, and other qualified individuals, we maintain an overwhelmingly positive rating.</em>
-			</p>
-			<p>
-				&#xa0;
-			</p>
-			<p>
-				<strong>What people say:</strong>
-			</p>
-			<p>
-				<em>"I think we have nothing like this"</em><br /><br /><em>"It is very valuable resource for every student"</em><br /><br /><em>"A single website with local information does not exist"</em><br /><br /><em>"Kids/parents needs a trusted resource center"</em><br /><br /><em>"I found the page and the information provided highly valuable and comprehensive. It will be a valuable resource for the parents, students and teachers"</em><br /><br /><em>"The Resource Centre will help any parent or even teachers who wants to support a child in achieving his best of the abilities"</em>
-			</p>
-			<p>
-				<br /><em>"I think that The Resource Center fulfills the need for students that want a personalized learning path."</em><br /><br /><em>"There is no other resource available like it."</em><br /><br /><em>"Covered all the areas which K-12 students really need"</em><br /><br /><em>"It will help my son plan his course of action"</em><br /><br /><em>"It is an absolutely great resource which provides a platform for students who want to participate in competitions and also provides comprehensive insight into personalized learning plan"</em><br /><br /><em>"The Resource Center would be a useful to find resources to use in the classroom"</em><br /><br /><em>"The curation of the resources has an education focus and would benefit students and educators"</em>
-			</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Vision and Impact - The Resource Center</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+        .content-container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Main Heading Style */
+        h1 {
+            color: #FF7F00; /* Orange color */
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+
+        /* Subheading Style */
+        h2 {
+            color: #7A00FF; /* Purple color */
+            font-size: 1.4em;
+            margin-top: 1em;
+        }
+
+        /* Centered Quote Style */
+        .quote {
+            font-style: italic;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        /* Image Style */
+        .center-image {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            text-align: left;
+            font-style: italic;
+            color: #333;
+            margin-top: 30px;
+        }
+        .testimonial {
+            margin-bottom: 15px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            .content-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container" id="content">
+        <center><p class="quote">“Every child can thrive”</p></center>
+        <p>
+            Every student has the potential to succeed, and at The Resource Center, we are committed to ensuring personalized learning is accessible to all. Inspired by local needs, our mission is to bridge skill gaps observed across Canada and address productivity challenges by equipping students with the skills they need for the future.
+        </p>
+
+        <h2>Our Impact</h2>
+        <p>
+            Initial surveys indicate a strong demand from parents and teachers who see immense value in the time and resource efficiency that The Resource Center brings. Studies show that tools like ours can significantly reduce teacher workload, enabling more one-on-one interaction with students and enriching the educational experience.
+        </p>
+        
+        <!-- Animated Graph/Image -->
+        <img src="static/animated_rating.svg" alt="User Satisfaction Rating" class="center-image">
+        <p class="quote">Tested by parents, teachers, and other qualified individuals, we maintain an overwhelmingly positive rating.</p>
+
+        <h2>What People Say</h2>
+        <div class="testimonials">
+            <p class="testimonial">“I think we have nothing like this.”</p>
+            <p class="testimonial">“It is a very valuable resource for every student.”</p>
+            <p class="testimonial">“A single website with local information does not exist.”</p>
+            <p class="testimonial">“Kids and parents need a trusted resource center.”</p>
+            <p class="testimonial">“I found the page and information highly valuable and comprehensive.”</p>
+            <p class="testimonial">“The Resource Center fulfills the need for personalized learning paths for students.”</p>
+            <p class="testimonial">“The curation of resources is educationally focused and beneficial.”</p>
+            <p class="testimonial">“It provides comprehensive insight into personalized learning plans.”</p>
+        </div>
+    </div>
+
+    <script src="static/animation.js"></script><script>
+		function go() {
+			const reference = document.getElementById('mainmenu');
+			const target = document.getElementById('content');
+			const r = reference.getBoundingClientRect();
+			target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+			console.log(target.style.transform);
+		}
+		window.addEventListener('load', go); window.addEventListener('resize', go);</script>
 </body>
 </html>

@@ -1,51 +1,97 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en-CA">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>About Us - The Resource Center</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+        .content-container {
+            width: 95%;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
 
+        /* Main Heading Style */
+        h1 {
+            color: #FF7F00; /* Orange color */
+            font-size: 1.8em;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Subheading Style */
+        h2 {
+            color: #7A00FF; /* Purple color */
+            font-size: 1.4em;
+            margin-top: 1em;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            .content-container {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="content-container" id="content">
+        <h1>About Us - The Resource Center</h1>
+        <p>
+            The Resource Center is an innovative, AI-driven platform dedicated to making education more accessible, personalized, and effective for K-12 students in British Columbia and beyond. Recognizing the diversity of learning needs and the existing gaps in K-12 education, we provide tailored learning resources and support that allow each student to thrive.
+        </p>
 
-<div>
+        <h2>What We Do</h2>
+        <p>
+            The Resource Center offers a comprehensive platform for students, teachers, and parents to find high-quality educational resources efficiently. Our tools include:
+        </p>
+        <ul>
+            <li>
+                <strong>Broad and Focused Search Options</strong>: Whether users are exploring a wide range of resources or looking for specific materials, our search options help streamline and refine the search process.
+            </li>
+            <li>
+                <strong>Personalized Learning Plan (PLP) Generator</strong>: This feature creates a customized learning plan based on each student's strengths, areas for improvement, and goals. Using advanced AI, the generator curates a list of recommended resources to support these goals, promoting a truly individualized learning experience.
+            </li>
+        </ul>
 
-    <p>
-        <strong>About Us - The Resource Center</strong>
-    </p>
-    <p>
-        The Resource Center is an innovative, AI-driven platform dedicated to making education more accessible, personalized, and effective for K-12 students in British Columbia and beyond. Recognizing the diversity of learning needs and the existing gaps in K-12 education, we provide tailored learning resources and support that allow each student to thrive.
-    </p>
-    <p>
-        <strong>What We Do</strong>
-    </p>
-    <p>
-        The Resource Center offers a comprehensive platform for students, teachers, and parents to find high-quality educational resources efficiently. Our tools include:
-    </p>
-    <ul>
-        <li style="margin-left:27.6pt; line-height:108%; padding-left:8.4pt;">
-            <strong><span style="line-height:108%;">Broad and Focused Search Options</span></strong><span style="line-height:108%;">: Whether users are exploring a wide range of resources or looking for specific materials, our search options help streamline and refine the search process.</span>
-        </li>
-        <li style="margin-left:27.6pt; line-height:108%; padding-left:8.4pt; font-family:serif; font-size:10pt">
-            <strong><span style="line-height:108%;">Personalized Learning Plan (PLP) Generator</span></strong><span style="line-height:108%;">: This feature creates a customized learning plan based on each student's strengths, areas for improvement, and goals. Using advanced AI, the generator curates a list of recommended resources to support these goals, promoting a truly individualized learning experience.</span>
-        </li>
-    </ul>
-    <p>
-        <strong>Why We’re Unique</strong>
-    </p>
-    <p>
-        Unlike existing resources, The Resource Center is free (with subscription options), localized, and exclusively designed to cater to K-12 needs, focusing on curated, relevant content that supports both foundational and advanced learning requirements. Our platform stands out because we connect users to valuable resources, not just generic tools, making learning accessible and meaningful.
-    </p>
-    <p>
-        <strong>Looking Ahead</strong>
-    </p>
-    <p>
-        Our journey is just beginning. As we grow, The Resource Center aims to expand across Canada, continuously improving through user feedback, refining our AI-driven insights, and developing dedicated spaces for teachers, parents, and students to meet their unique needs.
-    </p>
-    <p>
-        Together, we are making personalized learning accessible to all — because every student deserves the opportunity to thrive.
-    </p>
+        <h2>Why We're Unique</h2>
+        <p>
+            Unlike existing resources, The Resource Center is free (with subscription options), localized, and exclusively designed to cater to K-12 needs, focusing on curated, relevant content that supports both foundational and advanced learning requirements. Our platform stands out because we connect users to valuable resources, not just generic tools, making learning accessible and meaningful.
+        </p>
 
-<br>
-</div>
-
-
+        <h2>Looking Ahead</h2>
+        <p>
+            Our journey is just beginning. As we grow, The Resource Center aims to expand across Canada, continuously improving through user feedback, refining our AI-driven insights, and developing dedicated spaces for teachers, parents, and students to meet their unique needs.
+        </p>
+        
+        <p>
+            Together, we are making personalized learning accessible to all - because every student deserves the opportunity to thrive.
+        </p>
+    </div>
+    <script>
+        function go() {
+            const reference = document.getElementById('mainmenu');
+            const target = document.getElementById('content');
+            const r = reference.getBoundingClientRect();
+            target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+            console.log(target.style.transform);
+        }
+        window.addEventListener('load', go); window.addEventListener('resize', go);
+    </script>
+</body>
 </html>

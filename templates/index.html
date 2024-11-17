@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-    <head><link rel="stylesheet" href="static/styles.css" >
+    <head><link rel="stylesheet" href="static/styles.css">
         </head>
     <body>
       <div class="topright">
@@ -36,10 +36,18 @@
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-      <div style="top: 150px; left: 50%; transform: translateX(-50vh); position:absolute;">
-      <center><h1 id="about">About Us - The Resource Center</h1></center>
+      <div>
         <center><div class="about">{{render('About_new.html', reviewsleft=reviewsleft, reviewsright=reviewsright) | safe}}</div></center>
                 
                 <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script>
+                <script>
+                  function go() {
+                      const reference = document.getElementById('mainmenu');
+                      const target = document.getElementById('content');
+                      const r = reference.getBoundingClientRect();
+                      target.style.transform = `translateY(${r.top + r.height + 25}px)`;
+                      console.log(target.style.transform);
+                  }
+                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
         </body>
 </html>

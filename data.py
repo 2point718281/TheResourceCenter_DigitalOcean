@@ -66,15 +66,8 @@ def correct_excel(file):
     # Loop until all redundant commas are removed
     while txt != last_txt:
         last_txt = txt
-        txt = txt.replace("/ ", "/")
+        txt = txt.replace("/ ", "/").replace(",,", ",")
         logger.debug(f"Correcting slashes in file {file}")
-
-    last_txt = ""
-
-    while txt != last_txt:
-        last_txt = txt
-        txt = txt.replace(",,", ",")
-        logger.debug(f"Correcting redundant commas in file {file}")
 
     # Save the corrected content back to the file
     with open(file, "w") as f:
@@ -241,7 +234,7 @@ class BroadDatabase:
 
         try:
             # Load CSV data
-            with open(file, newline="\n") as f:
+            with open(file) as f:
                 reader = csv.reader(f)
                 data = [row for row in reader]
                 self.titles = [i.strip().replace("/ ", "/") for i in data[0]]  # The titles are in the first row
@@ -512,7 +505,7 @@ class BroadDatabase:
         logger.info(f"Search completed. Found {len(search_results)} matching results")
         return res # search_results
 
-    def convert(self, result, raw, rating=None):
+    def convert(self, result, raw, rating=None, focused_s = False):
         """
         Convert a search result into a readable format.
 
@@ -522,6 +515,9 @@ class BroadDatabase:
         logger.debug(f"Converting result: {result}")
         result = result
         human_relevant = 1, 0, 2, 4, 5, 6, 7, 13, 14, 15, 9
+        if focused_s:
+            human_relevant = 0, 1, 2, 4, 5, 6, 7, 13, 9
+            
         def conv(type_, s):
             if type_ == str:
                 return ' '.join([i.capitalize() for i in s.strip(''.join([i for i in string.punctuation if i not in '()'])).split()]).replace('aops', 'AoPS') # Add special tokens here
@@ -537,13 +533,12 @@ class BroadDatabase:
                     return '∞'
 
                 return str(s)
-            
         r = [
             (conv(str, self.titles[i]), conv(self.types[i], result[i]))
             for i in human_relevant
         ]
         if raw:
-            r.insert(-1, ("Raw Rating", result[-2]))
+            r.insert(-1, ("Raw Rating", conv(float, result[-2])))
         # Process the age range to ensure correct formatting in the output
 
         if rating is not None:
@@ -565,7 +560,6 @@ class BroadDatabase:
         )
         filtered = self._search(string, None, raw)
         # Convert results to a human-readable format and return
-        print(filtered[0])
         results = [self.convert(i[0], raw, i[1]) for i in filtered[:num_res]]
         logger.info(f"Search completed. Returning {len(results)} results")
         return results
@@ -627,16 +621,16 @@ class BroadDatabase:
             results = []
             if query:
                 for i in self._search(
-                    query, [row[:10] + [row[-1]] for row in filtered], raw=raw
+                    query, filtered, raw=raw
                 ):
                     try:
-                        results.append(self.convert(i, raw=raw))
+                        results.append(self.convert(i[0], raw, i[1], True))
                     except Exception as e:
                         logger.error(f"Error converting result {i}: {e}")
 
             else:
                 for row in filtered:
-                    results.append(self.convert(row[:10] + [row[-1]], raw=False))
+                    results.append(self.convert(row, False, None, True))
 
             logger.info(f"Specific search completed. Found {len(results)} results")
             return results

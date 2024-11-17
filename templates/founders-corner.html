@@ -1,22 +1,104 @@
 <!DOCTYPE html>
 <html lang="en-CA">
-	<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8" />
-		
-	</head>
-	<body>
-			<p>
-				Hello, I'm Krivan Mirok, the founder of The Resource Center. From a young age, I've been driven by a passion for math, coding, and AI, and I've always been fascinated by how technology can solve real-world problems. My interest in STEM grew as I recognized how these skills play a vital role in shaping our world.
-			</p>
-			<p>
-				Like many students, I found that the traditional one-size-fits-all approach to education didn't align with my learning style. After seeing the time and effort my parents put into finding resources that fit my needs, I realized that many other students encounter similar challenges. This experience inspired me to create The Resource Center - a platform that provides personalized learning plans and curated resources to help each student reach their full potential.
-			</p>
-			<p>
-				My goal is to make education more accessible, equitable, and tailored to individual learning needs, so students can navigate the vast landscape of online resources with confidence. Through The Resource Center, I hope to show students, parents, and educators how AI can enhance education by creating custom learning experiences that honor each learner's unique strengths and challenges.
-			</p>
-			<p>
-				Thank you for visiting The Resource Center! I hope it becomes a valuable tool in your educational journey.
-			</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Meet the Founder - The Resource Center</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+        .content-container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            /* padding: 20px; */
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Main Heading Style */
+        h1 {
+            color: #FF7F00; /* Orange color */
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+
+        /* Subheading Style */
+        h2 {
+            color: #7A00FF; /* Purple color */
+            font-size: 1.4em;
+            margin-top: 1em;
+        }
+
+        /* Founder Image Style */
+        .founder-image {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        /* Content Styling */
+        .intro-text {
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+        
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            .content-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container" id="content">
+        <h1>Meet the Founder - Krivan Mirok</h1>
+        
+        <!-- Founder Image -->
+        <img src="static/Krivan2.jpg" alt="Krivan Mirok: The Founder" class="founder-image">
+        
+        <!-- Introduction Section -->
+        <p class="intro-text">
+            Hello, I'm Krivan Mirok, the founder of The Resource Center. From a young age, I've been driven by a passion for math, coding, and AI, and I've always been fascinated by how technology can solve real-world problems.
+        </p>
+
+        <h2>My Inspiration</h2>
+        <p>
+            Like many students, I found that the traditional one-size-fits-all approach to education didn't align with my learning style. After seeing the time and effort my parents put into finding resources that fit my needs, I realized that many other students encounter similar challenges. This experience inspired me to create The Resource Center - a platform that provides personalized learning plans and curated resources to help each student reach their full potential.
+        </p>
+
+        <h2>Our Vision</h2>
+        <p>
+            My goal is to make education more accessible, equitable, and tailored to individual learning needs. Through The Resource Center, I aim to show students, parents, and educators how AI can enhance education by creating custom learning experiences that honor each learner's unique strengths and challenges.
+        </p>
+
+        <h2>A Message to You</h2>
+        <p>
+            Thank you for visiting The Resource Center! I hope it becomes a valuable tool in your educational journey. Together, we are shaping the future of personalized learning.
+        </p>
+    </div>
+	<script>
+		function go() {
+			const reference = document.getElementById('mainmenu');
+			const target = document.getElementById('content');
+			const r = reference.getBoundingClientRect();
+			target.style.transform = `translateY(${r.top + r.height}px)`;
+			console.log(target.style.transform);
+		}
+		window.addEventListener('load', go); window.addEventListener('resize', go);</script>
 </body>
 </html>

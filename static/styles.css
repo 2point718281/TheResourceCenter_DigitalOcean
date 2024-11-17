@@ -200,16 +200,13 @@ p {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: #333333;
   top: 120px;
   width: --screen-x;
 }
 
 /* Style the dropdown */
-
-
-
 .menuelement {
   float: left;
 }
@@ -346,4 +343,29 @@ h1 {
   overflow-y: scroll;
   top: vh;
   left: -1000px;
+}
+
+/* Font size adjustments for better readability */
+.about, p, ul {
+  font-size: 18px; /* Increased font size */
+  line-height: 1.7;
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about, p, ul {
+      font-size: 16px; /* Slightly smaller font for mobile */
+      padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1, h2 {
+      font-size: 1.5em; /* Adjust heading sizes for mobile */
+  }
+  .content-container {
+      padding: 10px;
+  }
 }

@@ -36,28 +36,166 @@
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-      <form action='/suggest' method="post">
-        <br><br><br><br><br><br>
-        <p>Resource Type: </p><input type="text" name="rtype"><br>
-        <p>Resource Name: </p><input type="text" name="rname"><br>
-        <p>Subjects (Separated by commas): </p><input type="text" name="rsubjects"><br>
-        <input type="range" id="minage" name="minage" min="0" max="99" value="0" step="1" onclick="updateslider()">
-        <label for="minage" id="minagel">
-            
-        </label>
-        <br>
-        <input type="range" id="maxage" name="maxage" min="0" max="99" value="99" step="1" onclick="updateslider()">
-        <label for="maxage" id="maxagel">
-            
-        </label></div>
-        <br>
-        <p>Organizer: </p><input type="text" name="org"><br>
-        <p>Brief Description: </p><input type="text" name="desc"><br>
-        <p>Link to website: </p><input type="text" name="url">
-        <input type="submit" value="Submit as Suggestion">
-    </form>
-          
+      <div style="top: 150px; left: 50%; transform: translateX(-50vh); position:absolute;">
+        <!DOCTYPE html>
+<html lang="en-CA">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Contact Us - The Resource Center</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+        .content-container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Main Heading Style */
+        h1 {
+            color: #FF7F00; /* Orange color */
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+
+        /* Form Styles */
+        .form-section {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .form-section h2 {
+            color: #7A00FF; /* Purple color */
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+        .form-section label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .form-section input[type="text"],
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .form-section input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .form-section input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            .content-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container" id="content">
+        <h1>Contact Us</h1>
+        
+        <!-- Feedback Form -->
+        <div class="form-section">
+            <h2>Feedback</h2>
+            <p>To give us feedback, please fill out the form located <a href="https://docs.google.com/forms/d/1Jj1eh_nhPTS1cTZk-GtfwOCuUjAA3i6zX52k38vdPpY/closedform" target="_blank">here</a></p>
+        </div>
+
+        <!-- Suggest a Resource Form -->
+        <div class="form-section">
+            <h2>Suggest a Resource</h2>
+            <form action="/suggest-resource" method="post">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="type">Resource Type:</label>
+                <input type="text" id="type" name="type" required>
+
+                <label for="link">Resource Link:</label>
+                <input type="text" id="link" name="link" required>
+
+                <label for="grade">Grade Level of Resource:</label>
+                <input type="text" id="grade" name="grade" required>
+
+                <input type="submit" value="Suggest Resource">
+            </form>
+        </div>
+
+        <p style="margin-top: 30px;">
+            For other inquiries, reach us at <a href="mailto:info@resourcecenter.ca">info@resourcecenter.ca</a>
+        </p>
+    </div>
+
+    <script>
+        // Optional JavaScript to handle form submission for feedback and resource suggestion
+        document.querySelector('form[action="/send-feedback"]').onsubmit = function(event) {
+            event.preventDefault();
+            const feedback = document.getElementById('feedback').value;
+
+            fetch('/send-feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ feedback })
+            }).then(response => response.ok && alert('Feedback sent successfully!'))
+              .catch(error => alert('Error sending feedback. Please try again.'));
+        };
+
+        document.querySelector('form[action="/suggest-resource"]').onsubmit = function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const type = document.getElementById('type').value;
+            const link = document.getElementById('link').value;
+            const grade = document.getElementById('grade').value;
+
+            fetch('/suggest-resource', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, type, link, grade })
+            }).then(response => response.ok && alert('Resource suggestion sent successfully!'))
+              .catch(error => alert('Error sending suggestion. Please try again.'));
+        };
+    </script>
+</body>
+</html>
+
                 
-                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/sliders.js"></script><script>updateslider()</script>
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
+                  function go() {
+                      const reference = document.getElementById('mainmenu');
+                      const target = document.getElementById('content');
+                      const r = reference.getBoundingClientRect();
+                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+                      console.log(target.style.transform);
+                  }
+                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
         </body>
 </html>

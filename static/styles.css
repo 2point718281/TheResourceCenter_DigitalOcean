@@ -200,10 +200,10 @@ p {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  max-width: 10000px;
   /* overflow: hidden; */
   background-color: #333333;
   top: 120px;
-  width: --screen-x;
 }
 
 /* Style the dropdown */

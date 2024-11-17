@@ -1,81 +1,4 @@
-<!DOCTYPE html>
-<html lang="en-CA">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles.css">
-    <title>Vision and Impact - The Resource Center</title>
-    <style>
-        /* General Page Styles */
-        body {
-            font-family: Arial, sans-serif;
-            padding: 0;
-            margin: 0;
-        }
-        .content-container {
-            width: 90%;
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        /* Main Heading Style */
-        h1 {
-            color: #FF7F00; /* Orange color */
-            font-size: 1.8em;
-            margin-top: 20px;
-        }
-
-        /* Subheading Style */
-        h2 {
-            color: #7A00FF; /* Purple color */
-            font-size: 1.4em;
-            margin-top: 1em;
-        }
-
-        /* Centered Quote Style */
-        .quote {
-            font-style: italic;
-            color: #555;
-            margin: 20px 0;
-        }
-
-        /* Image Style */
-        .center-image {
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-
-        /* Testimonials Section */
-        .testimonials {
-            text-align: left;
-            font-style: italic;
-            color: #333;
-            margin-top: 30px;
-        }
-        .testimonial {
-            margin-bottom: 15px;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-            }
-            h2 {
-                font-size: 1.2em;
-            }
-            .content-container {
-                padding: 15px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="content-container" id="content">
+<div>
         <center><p class="quote">“Every child can thrive”</p></center>
         <p>
             Every student has the potential to succeed, and at The Resource Center, we are committed to ensuring personalized learning is accessible to all. Inspired by local needs, our mission is to bridge skill gaps observed across Canada and address productivity challenges by equipping students with the skills they need for the future.
@@ -103,14 +26,4 @@
         </div>
     </div>
 
-    <script src="static/animation.js"></script><script>
-		function go() {
-			const reference = document.getElementById('mainmenu');
-			const target = document.getElementById('content');
-			const r = reference.getBoundingClientRect();
-			target.style.transform = `translateY(${r.top + r.height + 50}px)`;
-			console.log(target.style.transform);
-		}
-		window.addEventListener('load', go); window.addEventListener('resize', go);</script>
-</body>
-</html>
+    <script src="static/animation.js"></script>

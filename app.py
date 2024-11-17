@@ -28,6 +28,7 @@ import base64
 import socket
 import webbrowser
 import env # Environment Variables
+from NLP.preprocessing import get_filter
 
 from flask import (
     Flask,
@@ -78,6 +79,8 @@ topicchooser = ''
 # Feature toggle settings
 functionalities = {"search": True, "plp": False}
 
+# Filter for autocorrect
+autocorrect1, autocorrect2 = get_filter(False, False, False, True, False, True, False, True), get_filter(False, False, False, True, False, False, False, False)
 
 # Helper function to load HTML templates
 def load_template(file_name, mode = 'r'):
@@ -324,8 +327,14 @@ if functionalities["search"]:
 
         :return: Flask response object.
         """
-        query = request.args.get("q", "").lower().strip()
-        results = broad.search(query, show_raw_search) if query else []
+        query = request.args.get("q", "")
+        _, results = broad.search(query.lower().strip(), show_raw_search) if query else (query, [])
+        new_query = autocorrect1(query)   # We've cached the results from the functions, so this won't take long
+        query_ = autocorrect2(query)
+        
+        autocorrected = [(new_query[x] != query_[x], new_query[x]) for x in range(len(new_query))]
+        if any([token[0] for token in autocorrected]):
+            return render_template("bsearch.html", results=results, query=query, new_query=autocorrected)
         return render_template("bsearch.html", results=results, query=query)
 
     def focusedsearch():
@@ -349,16 +358,18 @@ if functionalities["search"]:
             )
             rtypes_ = set([rtype for rtype in rtypes if request.form.get(rtype, False)])
             ages = set([i for i in range(1, 13) if bool(request.form.get(str(i), False))])
-            if ages and subjects_ and rtypes_:
-                return render_template(
-                    "fsearch.html",
-                    results=broad.search_specific(
+            results = broad.search_specific(
                         query='',   # We are not using queries for focused search right now
                         ages=ages,
                         subjects_=subjects_,
                         rtypes=rtypes_,
-                    ), broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
-                )
+                    )
+            
+            return render_template(
+                "fsearch.html",
+                results=results, broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13))
+            )
+
         return render_template("fsearch.html", results=[], broad_subjects=broad_subject_mapping, rtypes=rtypes, query="", grades = list(range(1, 13)))
 
 

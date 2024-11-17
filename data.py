@@ -499,11 +499,11 @@ class BroadDatabase:
 
         else:
             res = [
-                (i[0], position_as_word(x, len(search_results)))
+                (i[1], position_as_word(x, len(search_results)))
                 for x, i in enumerate(search_results)
             ]
         logger.info(f"Search completed. Found {len(search_results)} matching results")
-        return res # search_results
+        return string, res # search_results
 
     def convert(self, result, raw, rating=None, focused_s = False):
         """
@@ -558,11 +558,11 @@ class BroadDatabase:
         logger.info(
             f"Searching database for query: '{string}' with max results {num_res}"
         )
-        filtered = self._search(string, None, raw)
+        string, filtered = self._search(string, None, raw)
         # Convert results to a human-readable format and return
         results = [self.convert(i[0], raw, i[1]) for i in filtered[:num_res]]
         logger.info(f"Search completed. Returning {len(results)} results")
-        return results
+        return string, results
 
     def search_specific(self, query, ages, subjects_, rtypes, raw=False):
         """
@@ -622,7 +622,7 @@ class BroadDatabase:
             if query:
                 for i in self._search(
                     query, filtered, raw=raw
-                ):
+                )[1]:
                     try:
                         results.append(self.convert(i[0], raw, i[1], True))
                     except Exception as e:

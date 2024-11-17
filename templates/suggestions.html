@@ -1,6 +1,93 @@
 <!doctype html>
 <html lang="en">
-    <head><link rel="stylesheet" href="static/styles.css" >
+    <head><link rel="stylesheet" href="static/styles.css" ><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/styles.css">
+        <title>Contact Us - The Resource Center</title>
+        <style>
+            /* General Page Styles */
+            body {
+                font-family: Arial, sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+            .content-container {
+                    width: 100%;
+                    margin: auto;
+                    padding: 20px;
+                    line-height: 1.6;
+                    text-align: center;
+                }
+    
+            /* Main Heading Style */
+            h1 {
+                color: #FF7F00; /* Orange color */
+                font-size: 1.8em;
+                margin-top: 20px;
+            }
+    
+            /* Form Styles */
+            .form-section {
+                text-align: left;
+                margin-top: 20px;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+            }
+            .form-section h2 {
+                color: #7A00FF; /* Purple color */
+                font-size: 1.4em;
+                margin-bottom: 10px;
+            }
+            .form-section label {
+                font-weight: bold;
+                display: block;
+                margin-top: 10px;
+            }
+            .form-section input[type="text"],
+            .form-section textarea {
+                width: 100%;
+                padding: 10px;
+                font-size: 1em;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-top: 5px;
+            }
+            .form-section input[type="submit"] {
+                padding: 10px 20px;
+                font-size: 1em;
+                color: white;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+            .form-section input[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+    
+            /* Mobile Adjustments */
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 1.5em;
+                }
+                .content-container {
+                    padding: 15px;
+                }
+            }
+    
+            .voting-section {
+                    margin-top: 30px;
+                    margin-bottom: 30px;
+                    font-size: 1em;
+                    color: #333;
+                    border-top: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    padding-top: 20px;
+            }
+        </style>
         </head>
     <body>
       <div class="topright">
@@ -36,94 +123,23 @@
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-      <div style="top: 150px; left: 50%; transform: translateX(-50vh); position:absolute;">
-        <!DOCTYPE html>
-<html lang="en-CA">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/styles.css">
-    <title>Contact Us - The Resource Center</title>
-    <style>
-        /* General Page Styles */
-        body {
-            font-family: Arial, sans-serif;
-            padding: 0;
-            margin: 0;
-        }
-        .content-container {
-            width: 90%;
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        /* Main Heading Style */
-        h1 {
-            color: #FF7F00; /* Orange color */
-            font-size: 1.8em;
-            margin-top: 20px;
-        }
-
-        /* Form Styles */
-        .form-section {
-            text-align: left;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-        .form-section h2 {
-            color: #7A00FF; /* Purple color */
-            font-size: 1.4em;
-            margin-bottom: 10px;
-        }
-        .form-section label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-        .form-section input[type="text"],
-        .form-section textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-top: 5px;
-        }
-        .form-section input[type="submit"] {
-            padding: 10px 20px;
-            font-size: 1em;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .form-section input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-            }
-            .content-container {
-                padding: 15px;
-            }
-        }
-    </style>
-</head>
+      <div>
 <body>
     <div class="content-container" id="content">
         <h1>Contact Us</h1>
-        
+        <div class="voting-section">
+            <p>
+                If you've reached this page and appreciate our work, please consider voting for us in the <strong>Youth Innovation Showcase People's Choice Award</strong>!
+            </p>
+            <p>
+                Voting is open until <strong>November 25, 2024</strong>. Your support means a lot, and it brings us closer to realizing this project!
+            </p>
+            <p>
+                <a href="https://forms.office.com/pages/responsepage.aspx?id=YzdagkRbDUG8sytdX7JnTnywosR-RadBhCtrlP2_svJUODNNUzlOSVlTNUVYUFYyU1hQTDNHVExDVCQlQCN0PWcu&route=shorturl" target="_blank" class="voting-link">
+                    Vote Now for the People's Choice Award
+                </a>
+            </p>
+        </div>
         <!-- Feedback Form -->
         <div class="form-section">
             <h2>Feedback</h2>
@@ -189,13 +205,26 @@
 
                 
                 <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
-                  function go() {
-                      const reference = document.getElementById('mainmenu');
-                      const target = document.getElementById('content');
-                      const r = reference.getBoundingClientRect();
-                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
-                      console.log(target.style.transform);
-                  }
-                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+                    function go() {
+    const reference = document.getElementById('mainmenu');
+    const target = document.getElementById('content');
+    
+    if (!reference || !target) {
+        console.error('Reference or target element not found');
+        return;
+    }
+
+    const scrollOffset = window.pageYOffset; // Current scroll position
+    const r = reference.getBoundingClientRect();
+    const referenceTop = r.top + scrollOffset; // Position relative to the document
+
+    target.style.position = 'absolute'; // Ensure positioning is set
+    target.style.top = `${referenceTop + r.height + 25}px`;
+
+    console.log(target.style.top);
+}
+window.addEventListener('load', go);
+window.addEventListener('resize', go);
+</script>
         </body>
 </html>

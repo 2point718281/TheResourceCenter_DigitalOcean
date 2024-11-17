@@ -1,6 +1,95 @@
 <!doctype html>
 <html lang="en">
-    <head><link rel="stylesheet" href="static/styles.css"><link rel="stylesheet" href="static/infocard.css">
+    <head><link rel="stylesheet" href="static/styles.css"><link rel="stylesheet" href="static/infocard.css"><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/styles.css">
+        <title>Focused Search - The Resource Center</title>
+        <style>
+            /* General Page Styles */
+            body {
+                font-family: Arial, sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+            .content-container {
+                width: 100%;
+                margin: auto;
+                padding: 20px;
+                line-height: 1.6;
+                text-align: center;
+                transform: translateY(20px);
+                opacity: 0;
+                animation: fadein 0.1s forwards;
+            }
+    
+            /* Main Heading Style */
+            h1 {
+                color: #FF7F00; /* Orange color */
+                font-size: 1.8em;
+                margin-top: 20px;
+            }
+    
+            /* Section Description Style */
+            .description {
+                font-size: 1.1em;
+                color: #555;
+                margin: 20px 0;
+            }
+    
+            /* Note Style */
+            .note {
+                color: #555;
+                font-size: 0.9em;
+                margin-bottom: 20px;
+            }
+    
+            /* Checkbox Form Style */
+            .form-section {
+                text-align: left;
+                margin-top: 20px;
+            }
+            .form-section label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 10px;
+            }
+            .form-section input[type="checkbox"] {
+                margin-right: 5px;
+            }
+    
+            /* Search Button Style */
+            .search-button {
+                padding: 10px 20px;
+                font-size: 1em;
+                color: white;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+    
+            /* Results Section */
+            
+    
+            /* Mobile Adjustments */
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 1.5em;
+                }
+                .description, .note, .search-button {
+                    font-size: 0.9em;
+                }
+                .content-container {
+                    padding: 15px;
+                    opacity: 0;
+                    animation: fade
+                }
+            }
+        </style>
         </head>
     <body>
       <div class="topright">
@@ -36,149 +125,71 @@
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-      <div style="top: 150px; left: 50%; transform: translateX(-50vh); position:absolute;">
-        <center><!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <link rel="stylesheet" href="static/styles.css">
-              <title>Focused Search - The Resource Center</title>
-              <style>
-                  /* General Page Styles */
-                  body {
-                      font-family: Arial, sans-serif;
-                      padding: 0;
-                      margin: 0;
-                  }
-                  .content-container {
-                      width: 90%;
-                      max-width: 800px;
-                      margin: auto;
-                      padding: 20px;
-                      line-height: 1.6;
-                      text-align: center;
-                  }
-          
-                  /* Main Heading Style */
-                  h1 {
-                      color: #FF7F00; /* Orange color */
-                      font-size: 1.8em;
-                      margin-top: 20px;
-                  }
-          
-                  /* Section Description Style */
-                  .description {
-                      font-size: 1.1em;
-                      color: #555;
-                      margin: 20px 0;
-                  }
-          
-                  /* Note Style */
-                  .note {
-                      color: #555;
-                      font-size: 0.9em;
-                      margin-bottom: 20px;
-                  }
-          
-                  /* Checkbox Form Style */
-                  .form-section {
-                      text-align: left;
-                      margin-top: 20px;
-                  }
-                  .form-section label {
-                      font-weight: bold;
-                      display: block;
-                      margin-bottom: 10px;
-                  }
-                  .form-section input[type="checkbox"] {
-                      margin-right: 5px;
-                  }
-          
-                  /* Search Button Style */
-                  .search-button {
-                      padding: 10px 20px;
-                      font-size: 1em;
-                      color: white;
-                      background-color: #007BFF;
-                      border: none;
-                      border-radius: 5px;
-                      cursor: pointer;
-                      margin-top: 20px;
-                  }
-                  .search-button:hover {
-                      background-color: #0056b3;
-                  }
-          
-                  /* Results Section */
-                  
-          
-                  /* Mobile Adjustments */
-                  @media (max-width: 600px) {
-                      h1 {
-                          font-size: 1.5em;
-                      }
-                      .description, .note, .search-button {
-                          font-size: 0.9em;
-                      }
-                      .content-container {
-                          padding: 15px;
-                      }
-                  }
-              </style>
-          </head>
-          <body>
+      <div>
+
               <div class="content-container" id="content">
                   <h1>Focused Search</h1>
+                  <center>
                   <p class="description">
                       The Focused Search feature of The Resource Center is designed to help you find precise resources that match your specific educational needs. If you’re looking to narrow down your options and avoid information overload, Focused Search provides tailored results based on selected criteria, making it easier to find the exact resources you need.
                   </p>
-          
+                  
                   <p class="note">*Please select at least one option from each of the following categories to refine your search effectively.</p>
-          
+                
                   <!-- Focused Search Form -->
                   <form action="/fsearch" method="post">
                       
                       <!-- Grade Selection -->
                       <div class="form-section">
+                        <center>
                           <label>* Select Grades to Search For:</label>
                           {% for grade in grades %}
-                              <input type="checkbox" value="{{ grade }}" name="grades">{{ grade }}
-                          {% endfor %}
+                          <input type="checkbox" value="{{ grade }}" name="{{ grade }}">{{ grade }}</option>
+                          {% endfor %}</center>
                       </div>
           
                       <!-- Resource Type Selection -->
                       <div class="form-section">
+                        <center>
                           <label>* Select Resource Type:</label>
                           {% for type in rtypes %}
-                              <input type="checkbox" value="{{ type }}" name="resource_types">{{ type }}
-                          {% endfor %}
+                          <input type="checkbox" value="{{ type }}" name="{{ type }}">{{ type }}</input>
+                          {% endfor %}</center>
                       </div>
           
                       <!-- Subject Selection -->
                       <div class="form-section">
+                        <center>
                           <label>* Select Resource Subject:</label>
                           {% for subject in broad_subjects %}
-                              <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="subjects"><label for="{{ subject }}">{{ subject }}</label>
-                          {% endfor %}
+                <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="{{ subject }}" onclick="update_children(this)"><label for="{{ subject }}">{{ subject }}</label>
+                {% endfor %}
+                <p style="text-align: left;">{% for subject in broad_subjects %}
+                {% if subject == "Multiple Areas K-12" %}
+                <span><b>Multiple Areas K-12: </b>Other resources</span>
+                {% else %}
+                <span><b>{{ subject }}: </b>This subject encompasses: {% for sub in broad_subjects[subject] %}{{ sub }}, {% endfor %}and other similar subjects.</span><br>
+                {% endif %}
+                {% endfor %}</p></center>
                       </div>
-          
+                    </center>
                       <!-- Submit Button -->
                       <input type="submit" value="Find Specific Resources" class="search-button">
           
                       <!-- Results Section -->
                       <div class="card-container">
-                          {% if len(results) %}
-                              {% for result in results %}
-                                  <div class="card">
-                                      <h2>{{ result[1][1] }}</h2>
-                                      {% for i in [result[0]] + result[2:-1] %}
-                                          <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
-                                      {% endfor %}
-                                      <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}" target="_blank">{{ result[-1][1] }}</a></p>
-                                  </div>
-                              {% endfor %}
-                          {% elif query %}
+                         
+                                {% if len(results) %}
+                                {% for x, result in enumerate(results) %}
+                                    <div class="card" id="{{'box' + x.__str__()}}">
+                                        <h2>{{ result[1][1] }}</h2>
+                                        {% for i in [result[0]] + result[2:-1] %}
+                                            <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                                        {% endfor %}
+                                        <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}" target="_blank">{{ result[-1][1] }}</a></p>
+                                    </div>
+                                {% endfor %}
+                            {% elif query %}
                               <p>No results found. Please try different criteria.</p>
                           {% endif %}
                       </div>
@@ -187,18 +198,28 @@
           
               <script src="static/globals.js"></script>
               <script src="static/rotate.js"></script>
-          </body>
-          </html>
-          </center>
                 
                 <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
-                  function go() {
-                      const reference = document.getElementById('mainmenu');
-                      const target = document.getElementById('content');
-                      const r = reference.getBoundingClientRect();
-                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
-                      console.log(target.style.transform);
-                  }
-                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+                    function go() {
+    const reference = document.getElementById('mainmenu');
+    const target = document.getElementById('content');
+    
+    if (!reference || !target) {
+        console.error('Reference or target element not found');
+        return;
+    }
+
+    const scrollOffset = window.pageYOffset; // Current scroll position
+    const r = reference.getBoundingClientRect();
+    const referenceTop = r.top + scrollOffset; // Position relative to the document
+
+    target.style.position = 'absolute'; // Ensure positioning is set
+    target.style.top = `${referenceTop + r.height + 25}px`;
+
+    console.log(target.style.top);
+}
+window.addEventListener('load', go);
+window.addEventListener('resize', go);
+</script><script src="static/animationqueue.js"></script>
         </body>
 </html>

@@ -1,6 +1,20 @@
 <!doctype html>
 <html lang="en">
     <head><link rel="stylesheet" href="static/styles.css">
+      <style>
+        @media (max-width: 600px) {
+                .content-container {
+                    padding: 15px;
+                }
+            }
+            .content-container {
+                    width: 100%;
+                    margin: auto;
+                    padding: 20px;
+                    line-height: 1.6;
+                    text-align: center;
+                }
+      </style>
         </head>
     <body>
       <div class="topright">
@@ -37,18 +51,31 @@
         </p></div></div>
       </center>
       <div>
-        <center><div class="about">{{load('founders-corner.html') | safe}}</div></center></div>
+        <center><div class="content-container">{{load('founders-corner.html') | safe}}</div></center></div>
                 
                 <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script>
 
                 <script>
                   function go() {
-                      const reference = document.getElementById('mainmenu');
-                      const target = document.getElementById('content');
-                      const r = reference.getBoundingClientRect();
-                      target.style.transform = `translateY(${r.top + r.height + 25}px)`;
-                      console.log(target.style.transform);
-                  }
-                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+  const reference = document.getElementById('mainmenu');
+  const target = document.getElementById('content');
+  
+  if (!reference || !target) {
+      console.error('Reference or target element not found');
+      return;
+  }
+
+  const scrollOffset = window.pageYOffset; // Current scroll position
+  const r = reference.getBoundingClientRect();
+  const referenceTop = r.top + scrollOffset; // Position relative to the document
+
+  target.style.position = 'absolute'; // Ensure positioning is set
+  target.style.top = `${referenceTop + r.height + 25}px`;
+
+  console.log(target.style.top);
+}
+window.addEventListener('load', go);
+window.addEventListener('resize', go);
+</script>
         </body>
 </html>

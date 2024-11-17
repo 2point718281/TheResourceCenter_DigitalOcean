@@ -13,8 +13,7 @@
                 margin: 0;
             }
             .content-container {
-                width: 90%;
-                max-width: 800px;
+                width: 100%;
                 margin: auto;
                 padding: 20px;
                 line-height: 1.6;
@@ -51,15 +50,7 @@
             }
     
             /* Voting Section */
-            .voting-section {
-                margin-top: 30px;
-                margin-bottom: 30px;
-                font-size: 1em;
-                color: #333;
-                border-top: 1px solid #ddd;
-                border-bottom: 1px solid #ddd;
-                padding-top: 20px;
-            }
+
             .voting-link {
                 color: #007BFF;
                 font-weight: bold;
@@ -119,36 +110,22 @@
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-      <div style="position:absolute;">
-        <!DOCTYPE html>
 
 <body>
-    <div class="content-container" id="content">
-        <div class="voting-section">
-            <p>
-                If you've reached this page and appreciate our work, please consider voting for us in the <strong>Youth Innovation Showcase People's Choice Award</strong>!
-            </p>
-            <p>
-                Voting is open until <strong>November 25, 2024</strong>. Your support means a lot, and it brings us closer to realizing this project!
-            </p>
-            <p>
-                <a href="https://forms.office.com/pages/responsepage.aspx?id=YzdagkRbDUG8sytdX7JnTnywosR-RadBhCtrlP2_svJUODNNUzlOSVlTNUVYUFYyU1hQTDNHVExDVCQlQCN0PWcu&route=shorturl" target="_blank" class="voting-link">
-                    Vote Now for the People's Choice Award
-                </a>
-            </p>
-        </div>
+    <center><div class="content-container" id="content">
+
 
         <h1>Personalized Learning Plan Creator</h1>
         <p class="coming-soon">Coming Soon!</p>
 
         <h2>What is the Personalized Learning Plan (PLP) Creator?</h2>
         <p class="explanation">
-            The PLP Creator is a unique tool that designs individualized learning plans based on each student’s strengths, areas for improvement, and goals. By using advanced AI, the PLP Creator will generate a detailed plan that includes targeted resources and structured steps to help students reach their academic potential.
+            The PLP Creator is a unique tool that designs individualized learning plans based on each student's strengths, areas for improvement, and goals. By using advanced AI, the PLP Creator will generate a detailed plan that includes targeted resources and structured steps to help students reach their academic potential.
         </p>
 
         <h2>How Will it Help You?</h2>
         <p class="explanation">
-            This feature will empower students, parents, and teachers to support personalized learning journeys by providing tailored resources that meet each student’s specific needs. The tool will match students with resources that align with their unique profiles, helping them grow academically and succeed.
+            This feature will empower students, parents, and teachers to support personalized learning journeys by providing tailored resources that meet each student's specific needs. The tool will match students with resources that align with their unique profiles, helping them grow academically and succeed.
         </p>
 
         <h2>Stay Tuned!</h2>
@@ -157,7 +134,7 @@
         </p>
 
         <!-- Voting Section -->
-    </div>
+    </div></center>
 </body>
 
                 
@@ -165,9 +142,17 @@
                     function go() {
                         const reference = document.getElementById('mainmenu');
                         const target = document.getElementById('content');
+                        
+                        if (!reference || !target) {
+                            console.error('Reference or target element not found');
+                            return;
+                        }
+
                         const r = reference.getBoundingClientRect();
-                        target.style.transform = `translateY(${r.top + r.height + 50}px)`;
-                        console.log(target.style.transform);
+                        target.style.position = 'absolute'; // Ensure positioning is set
+                        target.style.top = `${r.top + r.height + 25}px`;
+
+                        console.log(target.style.top);
                     }
                     window.addEventListener('load', go); window.addEventListener('resize', go);</script>
         </body>

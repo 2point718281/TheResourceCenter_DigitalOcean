@@ -13,11 +13,14 @@
                 margin: 0;
             }
             .content-container {
-                width: 90%;
+                width: 100%;
                 margin: auto;
                 padding: 20px;
                 line-height: 1.6;
                 text-align: center;
+                transform: translateY(20px);
+                opacity: 0;
+                animation: fadein 0.1s forwards;
             }
     
             /* Main Heading Style */
@@ -123,10 +126,11 @@
                   <div class="search-form">
                       <form action='/bsearch' method="get">
                           <input type="text" name="q" class="search-input" placeholder="Enter keywords..." value="{{ query }}">
-                          <input type="submit" value="Find Resources" class="search-button">
+                          <input type="submit" value="Find Resources" class="search-button"><br>
+                          
                       </form>
                   </div>
-          
+                  {% if new_query %}<label>Autocorrected to: {% for token in new_query %}{% if token[0] %}<u><i>{{ token[1] + ' ' }}</i></u>{% else %}{{ token[1] + ' ' }}{% endif %}{% endfor %}</label>{% endif %}
                   <!-- Results Section -->
                   <div class="card-container">
                       {% if len(results) %}
@@ -150,14 +154,27 @@
           </body>
           </center>
                 
-                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
-                  function go() {
-                      const reference = document.getElementById('mainmenu');
-                      const target = document.getElementById('content');
-                      const r = reference.getBoundingClientRect();
-                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
-                      console.log(target.style.transform);
-                  }
-                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/animationqueue.js"></script><script>
+                    function go() {
+    const reference = document.getElementById('mainmenu');
+    const target = document.getElementById('content');
+    
+    if (!reference || !target) {
+        console.error('Reference or target element not found');
+        return;
+    }
+
+    const scrollOffset = window.pageYOffset; // Current scroll position
+    const r = reference.getBoundingClientRect();
+    const referenceTop = r.top + scrollOffset; // Position relative to the document
+
+    target.style.position = 'absolute'; // Ensure positioning is set
+    target.style.top = `${referenceTop + r.height + 25}px`;
+
+    console.log(target.style.top);
+}
+window.addEventListener('load', go);
+window.addEventListener('resize', go);
+</script>
         </body>
 </html>

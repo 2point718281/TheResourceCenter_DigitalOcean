@@ -92,13 +92,25 @@
         </p>
     </div>
 	<script>
-		function go() {
-			const reference = document.getElementById('mainmenu');
-			const target = document.getElementById('content');
-			const r = reference.getBoundingClientRect();
-			target.style.transform = `translateY(${r.top + r.height}px)`;
-			console.log(target.style.transform);
-		}
-		window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+function go() {
+const reference = document.getElementById('mainmenu');
+const target = document.getElementById('content');
+
+if (!reference || !target) {
+console.error('Reference or target element not found');
+return;
+}
+
+const scrollOffset = window.pageYOffset; // Current scroll position
+const r = reference.getBoundingClientRect();
+const referenceTop = r.top + scrollOffset; // Position relative to the document
+
+target.style.position = 'absolute'; // Ensure positioning is set
+target.style.top = `${referenceTop + r.height + 25}px`;
+
+console.log(target.style.top);
+}
+window.addEventListener('load', go);
+window.addEventListener('resize', go);</script>
 </body>
 </html>

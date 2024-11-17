@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/styles.css">
+        <title>Personalized Learning Plan - Coming Soon</title>
+        <style>
+            /* General Page Styles */
+            body {
+                font-family: Arial, sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+            .content-container {
+                width: 90%;
+                max-width: 800px;
+                margin: auto;
+                padding: 20px;
+                line-height: 1.6;
+                text-align: center;
+            }
+    
+            /* Main Heading Style */
+            h1 {
+                color: #FF7F00; /* Orange color */
+                font-size: 1.8em;
+                margin-top: 20px;
+            }
+    
+            /* Subheading Style */
+            h2 {
+                color: #7A00FF; /* Purple color */
+                font-size: 1.4em;
+                margin-top: 1em;
+            }
+    
+            /* Coming Soon Message */
+            .coming-soon {
+                font-size: 1.2em;
+                color: #555;
+                margin-top: 20px;
+                font-style: italic;
+            }
+    
+            /* Explanation Style */
+            .explanation {
+                font-size: 1em;
+                color: #333;
+                margin-top: 20px;
+            }
+    
+            /* Voting Section */
+            .voting-section {
+                margin-top: 30px;
+                margin-bottom: 30px;
+                font-size: 1em;
+                color: #333;
+                border-top: 1px solid #ddd;
+                border-bottom: 1px solid #ddd;
+                padding-top: 20px;
+            }
+            .voting-link {
+                color: #007BFF;
+                font-weight: bold;
+                text-decoration: none;
+            }
+            .voting-link:hover {
+                text-decoration: underline;
+            }
+    
+            /* Mobile Adjustments */
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 1.5em;
+                }
+                h2, .coming-soon, .explanation, .voting-section {
+                    font-size: 0.9em;
+                }
+                .content-container {
+                    padding: 15px;
+                }
+            }
+    
+        </style>
+    <link rel="stylesheet" href="static/styles.css" >
+        </head>
+    <body>
+      <div class="topright">
+        <div class="dropdown">
+          {% if session['LoggedIn'] %}
+            <button class="dropbtn">{{session['username']}}</button>
+            <div class="dropdown-content">
+            <a href="#">Profile</a>
+            <a href="#">Preferences</a>
+            <a href="/LogOut">Logout</a></div>
+          {% else %}
+            <button class="dropbtn">Sign Up/Log In</button>
+            <div class="dropdown-content">
+            <a href="/SignUp">Sign Up</a>
+            <a href="/LogIn">Log In</a></div>
+          {% endif %}
+
+          
+          </div></div>
+          <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
+          
+          {{render('menu.html', **globals()) | safe}}
+      <center><div>
+      <div class="rotating-text">
+        <p class="whitetext">The Resource Center </p>
+        <p>
+          <span class="word alizarin">personalizes.</span>
+          <span class="word wisteria">counsels.</span>
+          <span class="word peter-river">inspires.</span>
+          <span class="word emerald">explains.</span>
+          <span class="word alizarin">finds.</span>
+          <span class="word wisteria">creates.</span>
+          <span class="word peter-river">simplifies.</span>
+        </p></div></div>
+      </center>
+      <div style="position:absolute;">
+        <!DOCTYPE html>
+
+<body>
+    <div class="content-container" id="content">
+        <div class="voting-section">
+            <p>
+                If you've reached this page and appreciate our work, please consider voting for us in the <strong>Youth Innovation Showcase People's Choice Award</strong>!
+            </p>
+            <p>
+                Voting is open until <strong>November 25, 2024</strong>. Your support means a lot, and it brings us closer to realizing this project!
+            </p>
+            <p>
+                <a href="https://forms.office.com/pages/responsepage.aspx?id=YzdagkRbDUG8sytdX7JnTnywosR-RadBhCtrlP2_svJUODNNUzlOSVlTNUVYUFYyU1hQTDNHVExDVCQlQCN0PWcu&route=shorturl" target="_blank" class="voting-link">
+                    Vote Now for the People's Choice Award
+                </a>
+            </p>
+        </div>
+
+        <h1>Personalized Learning Plan Creator</h1>
+        <p class="coming-soon">Coming Soon!</p>
+
+        <h2>What is the Personalized Learning Plan (PLP) Creator?</h2>
+        <p class="explanation">
+            The PLP Creator is a unique tool that designs individualized learning plans based on each student’s strengths, areas for improvement, and goals. By using advanced AI, the PLP Creator will generate a detailed plan that includes targeted resources and structured steps to help students reach their academic potential.
+        </p>
+
+        <h2>How Will it Help You?</h2>
+        <p class="explanation">
+            This feature will empower students, parents, and teachers to support personalized learning journeys by providing tailored resources that meet each student’s specific needs. The tool will match students with resources that align with their unique profiles, helping them grow academically and succeed.
+        </p>
+
+        <h2>Stay Tuned!</h2>
+        <p class="explanation">
+            We're working hard to bring this feature to you soon! Check back shortly for updates, and feel free to contact us at <a href="mailto:info@resourcecenter.ca">info@resourcecenter.ca</a> with any questions or suggestions.
+        </p>
+
+        <!-- Voting Section -->
+    </div>
+</body>
+
+                
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
+                    function go() {
+                        const reference = document.getElementById('mainmenu');
+                        const target = document.getElementById('content');
+                        const r = reference.getBoundingClientRect();
+                        target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+                        console.log(target.style.transform);
+                    }
+                    window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+        </body>
+</html>

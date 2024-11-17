@@ -1,71 +1,163 @@
-
-
 <!doctype html>
 <html lang="en">
-    <head><link rel="stylesheet" href="static/styles.css" ><link rel="stylesheet" href="static/infocard.css" >
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="static/styles.css">
+        <title>Broad Search - The Resource Center</title>
+        <style>
+            /* General Page Styles */
+            body {
+                font-family: Arial, sans-serif;
+                padding: 0;
+                margin: 0;
+            }
+            .content-container {
+                width: 90%;
+                margin: auto;
+                padding: 20px;
+                line-height: 1.6;
+                text-align: center;
+            }
+    
+            /* Main Heading Style */
+            h1 {
+                color: #FF7F00; /* Orange color */
+                font-size: 1.8em;
+                margin-top: 20px;
+            }
+    
+            /* Section Description Style */
+            .description {
+                font-size: 1.1em;
+                color: #555;
+                margin: auto;
+            }
+    
+            /* Search Input Style */
+            .search-form {
+                margin-top: 30px;
+            }
+            .search-input {
+                width: 100%;
+                max-width: 500px;
+                padding: 10px;
+                font-size: 1em;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .search-button {
+                padding: 10px 20px;
+                font-size: 1em;
+                color: white;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+    
+    
+            /* Mobile Adjustments */
+            @media (max-width: 600px) {
+                h1 {
+                    font-size: 1.5em;
+                }
+                .description, .search-input, .search-button {
+                    font-size: 0.9em;
+                }
+                .content-container {
+                    padding: 15px;
+                }
+            }
+        </style><link rel="stylesheet" href="static/styles.css"><link rel="stylesheet" href="static/infocard.css">
         </head>
     <body>
       <div class="topright">
-            {% if session['LoggedIn'] %}
+        <div class="dropdown">
+          {% if session['LoggedIn'] %}
             <button class="dropbtn">{{session['username']}}</button>
             <div class="dropdown-content">
             <a href="#">Profile</a>
             <a href="#">Preferences</a>
-            <a href="/LogOut">Logout</a>
+            <a href="/LogOut">Logout</a></div>
           {% else %}
             <button class="dropbtn">Sign Up/Log In</button>
             <div class="dropdown-content">
             <a href="/SignUp">Sign Up</a>
-            <a href="/LogIn">Log In</a>
+            <a href="/LogIn">Log In</a></div>
           {% endif %}
-            </div>
+
+          
           </div></div>
           <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
-
+          
           {{render('menu.html', **globals()) | safe}}
       <center><div>
       <div class="rotating-text">
         <p class="whitetext">The Resource Center </p>
         <p>
           <span class="word alizarin">personalizes.</span>
+          <span class="word wisteria">counsels.</span>
+          <span class="word peter-river">inspires.</span>
+          <span class="word emerald">explains.</span>
           <span class="word alizarin">finds.</span>
           <span class="word wisteria">creates.</span>
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
+      <div>
+        <center>
 
-          <div style="top:150px; position:absolute;"><h1 id="about">Search for something: </h1><form></form>
-          <form action='/bsearch' method="get">
-            <input type="text" name="q" value="{{ query }}"><input type="submit" value="Search">
-            <div class="card-container">
-              {% if len(results) %}
-              <div class="card" style="animation: fade 0.1s forwards;" id="box0" style="opacity: 0;">
-                <h2>{{ results[0][1][1] }}</h2>
-                {% for i in [results[0][0]] + results[0][2:-1] %}
-                    <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
-                {% endfor %}
-                <p><strong>{{ results[0][-1][0] }}:</strong> <a href="{{ results[0][-1][1] }}">{{ results[0][-1][1] }}</a></p>
-              </div>
-              
-                {% for x, result in enumerate(results[1:]) %}
-                    <div class="card" id="{{'box' + x.__str__()}}" style="opacity: 0;">
-                        <h2>{{ result[1][1] }}</h2>
-                        {% for i in [result[0]] + result[2:-1] %}
-                            <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
-                        {% endfor %}
-                        <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}">{{ result[-1][1] }}</a></p>
-                    </div>
-                {% endfor %}
-              {% elif query %}
-              No results
-              {% endif %}
-            </div>
-        </form></div>
+          <body>
+              <div class="content-container" id="content">
+                  <h1>Broad Search</h1>
+                  <p class="description">
+                      Welcome to Broad Search! Here, you can find a wide range of educational resources related to your search keywords. If you're looking for all relevant materials on a topic, this is the place to start. With Broad Search, you can access a comprehensive collection of resources that address the "resource underload" problem, giving you a robust foundation for your educational journey.
+                  </p>
           
-
+                  <!-- Search Form -->
+                  <div class="search-form">
+                      <form action='/bsearch' method="get">
+                          <input type="text" name="q" class="search-input" placeholder="Enter keywords..." value="{{ query }}">
+                          <input type="submit" value="Find Resources" class="search-button">
+                      </form>
+                  </div>
+          
+                  <!-- Results Section -->
+                  <div class="card-container">
+                      {% if len(results) %}
+                          {% for x, result in enumerate(results) %}
+                              <div class="card" id="{{'box' + x.__str__()}}">
+                                  <h2>{{ result[1][1] }}</h2>
+                                  {% for i in [result[0]] + result[2:-1] %}
+                                      <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                                  {% endfor %}
+                                  <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}" target="_blank">{{ result[-1][1] }}</a></p>
+                              </div>
+                          {% endfor %}
+                      {% elif query %}
+                          <p>No results found for your search. Please try different keywords.</p>
+                      {% endif %}
+                  </div>
+              </div>
+          
+              <script src="static/globals.js"></script>
+              <script src="static/rotate.js"></script>
+          </body>
+          </center>
                 
-                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/reloadplpc.js"></script>
-                <script src="static/autoscroll.js"></script><script src="static/animationqueue.js"></script>
-                </script>
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
+                  function go() {
+                      const reference = document.getElementById('mainmenu');
+                      const target = document.getElementById('content');
+                      const r = reference.getBoundingClientRect();
+                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+                      console.log(target.style.transform);
+                  }
+                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
         </body>
 </html>

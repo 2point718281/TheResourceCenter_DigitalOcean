@@ -1,95 +1,204 @@
-
-
 <!doctype html>
 <html lang="en">
-    <head><link rel="stylesheet" href="static/styles.css" ><link rel="stylesheet" href="static/infocard.css" >
+    <head><link rel="stylesheet" href="static/styles.css"><link rel="stylesheet" href="static/infocard.css">
         </head>
     <body>
       <div class="topright">
-            {% if session['LoggedIn'] %}
+        <div class="dropdown">
+          {% if session['LoggedIn'] %}
             <button class="dropbtn">{{session['username']}}</button>
             <div class="dropdown-content">
             <a href="#">Profile</a>
             <a href="#">Preferences</a>
-            <a href="/LogOut">Logout</a>
+            <a href="/LogOut">Logout</a></div>
           {% else %}
             <button class="dropbtn">Sign Up/Log In</button>
             <div class="dropdown-content">
             <a href="/SignUp">Sign Up</a>
-            <a href="/LogIn">Log In</a>
+            <a href="/LogIn">Log In</a></div>
           {% endif %}
-            </div>
+
+          
           </div></div>
           <div class='topleft'><img src='static/theresourcecenterlogo.png' width="100" height="100" preserveAspectRatio="xMinYMin" alt="The Resource Center"></div>
-
+          
           {{render('menu.html', **globals()) | safe}}
       <center><div>
       <div class="rotating-text">
         <p class="whitetext">The Resource Center </p>
         <p>
+          <span class="word alizarin">personalizes.</span>
+          <span class="word wisteria">counsels.</span>
+          <span class="word peter-river">inspires.</span>
+          <span class="word emerald">explains.</span>
           <span class="word alizarin">finds.</span>
           <span class="word wisteria">creates.</span>
           <span class="word peter-river">simplifies.</span>
         </p></div></div>
       </center>
-<!-- Page actually starts here -->
-          <div style="top:150px; position:absolute;">
-          <form action='/fsearch' method="post">
-                <!-- Grade Select -->
-                <br><br><label><b>Select Grades to search for:</b></label>
-                {% for grade in grades %}
-                <input type="checkbox" value="{{ grade }}" name="{{ grade }}">{{ grade }}</option>
-                {% endfor %}<br><br>
-                <!-- Resource Type Select -->
-                <label><b>Select Resource Type:</b></label>
-                {% for type in rtypes %}
-                <input type="checkbox" value="{{ type }}" name="{{ type }}">{{ type }}</input>
-                {% endfor %}
-                <br><br>
-                <label><b>Select Resource Subject:</b></label>
-                <br>
-                <!-- Subject Select -->
-                {% for subject in broad_subjects %}
-                <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="{{ subject }}" onclick="update_children(this)"><label for="{{ subject }}">{{ subject }}</label>
-                {% endfor %}
-                <div style="border: 1px solid #000; padding-left: 5px; padding-right: 10px;">
-                <b>Explanation of Resource Subjects</b>
-                <p>
-                {% for subject in broad_subjects %}
-                {% if subject == "Multiple Areas K-12" %}
-                <span><b>Multiple Areas K-12: </b>Other resources</span>
-                {% else %}
-                <span><b>{{ subject }}: </b>This subject encompasses: {% for sub in broad_subjects[subject] %}{{ sub }}, {% endfor %}and other similar subjects.</span><br>
-                {% endif %}
-                {% endfor %}
-                </p></div>
-                <br>
-                <input type="submit" value="Search">
-                <div class="card-container">
-                  {% if len(results) %}
-                  
-                    {% for result in results %}
-                        <div class="card">
-                          <h2>{{ result[1][1] }}</h2>
-                          {% for i in [result[0]] + result[2:-1] %}
-                              <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
-                          {% endfor %}
-                          <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}">{{ result[-1][1] }}</a></p>
-                        </div>
-                    {% endfor %}
-                  {% elif query %}
-                  No results
-                  {% endif %}
-                </div></div>
-        </form></div></div>
+      <div style="top: 150px; left: 50%; transform: translateX(-50vh); position:absolute;">
+        <center><!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <link rel="stylesheet" href="static/styles.css">
+              <title>Focused Search - The Resource Center</title>
+              <style>
+                  /* General Page Styles */
+                  body {
+                      font-family: Arial, sans-serif;
+                      padding: 0;
+                      margin: 0;
+                  }
+                  .content-container {
+                      width: 90%;
+                      max-width: 800px;
+                      margin: auto;
+                      padding: 20px;
+                      line-height: 1.6;
+                      text-align: center;
+                  }
           
-
+                  /* Main Heading Style */
+                  h1 {
+                      color: #FF7F00; /* Orange color */
+                      font-size: 1.8em;
+                      margin-top: 20px;
+                  }
+          
+                  /* Section Description Style */
+                  .description {
+                      font-size: 1.1em;
+                      color: #555;
+                      margin: 20px 0;
+                  }
+          
+                  /* Note Style */
+                  .note {
+                      color: #555;
+                      font-size: 0.9em;
+                      margin-bottom: 20px;
+                  }
+          
+                  /* Checkbox Form Style */
+                  .form-section {
+                      text-align: left;
+                      margin-top: 20px;
+                  }
+                  .form-section label {
+                      font-weight: bold;
+                      display: block;
+                      margin-bottom: 10px;
+                  }
+                  .form-section input[type="checkbox"] {
+                      margin-right: 5px;
+                  }
+          
+                  /* Search Button Style */
+                  .search-button {
+                      padding: 10px 20px;
+                      font-size: 1em;
+                      color: white;
+                      background-color: #007BFF;
+                      border: none;
+                      border-radius: 5px;
+                      cursor: pointer;
+                      margin-top: 20px;
+                  }
+                  .search-button:hover {
+                      background-color: #0056b3;
+                  }
+          
+                  /* Results Section */
+                  
+          
+                  /* Mobile Adjustments */
+                  @media (max-width: 600px) {
+                      h1 {
+                          font-size: 1.5em;
+                      }
+                      .description, .note, .search-button {
+                          font-size: 0.9em;
+                      }
+                      .content-container {
+                          padding: 15px;
+                      }
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="content-container" id="content">
+                  <h1>Focused Search</h1>
+                  <p class="description">
+                      The Focused Search feature of The Resource Center is designed to help you find precise resources that match your specific educational needs. If you’re looking to narrow down your options and avoid information overload, Focused Search provides tailored results based on selected criteria, making it easier to find the exact resources you need.
+                  </p>
+          
+                  <p class="note">*Please select at least one option from each of the following categories to refine your search effectively.</p>
+          
+                  <!-- Focused Search Form -->
+                  <form action="/fsearch" method="post">
+                      
+                      <!-- Grade Selection -->
+                      <div class="form-section">
+                          <label>* Select Grades to Search For:</label>
+                          {% for grade in grades %}
+                              <input type="checkbox" value="{{ grade }}" name="grades">{{ grade }}
+                          {% endfor %}
+                      </div>
+          
+                      <!-- Resource Type Selection -->
+                      <div class="form-section">
+                          <label>* Select Resource Type:</label>
+                          {% for type in rtypes %}
+                              <input type="checkbox" value="{{ type }}" name="resource_types">{{ type }}
+                          {% endfor %}
+                      </div>
+          
+                      <!-- Subject Selection -->
+                      <div class="form-section">
+                          <label>* Select Resource Subject:</label>
+                          {% for subject in broad_subjects %}
+                              <input type="checkbox" id="{{ subject }}" value="{{ subject }}" name="subjects"><label for="{{ subject }}">{{ subject }}</label>
+                          {% endfor %}
+                      </div>
+          
+                      <!-- Submit Button -->
+                      <input type="submit" value="Find Specific Resources" class="search-button">
+          
+                      <!-- Results Section -->
+                      <div class="card-container">
+                          {% if len(results) %}
+                              {% for result in results %}
+                                  <div class="card">
+                                      <h2>{{ result[1][1] }}</h2>
+                                      {% for i in [result[0]] + result[2:-1] %}
+                                          <p><strong>{{ i[0] }}:</strong> {{ i[1] }}</p>
+                                      {% endfor %}
+                                      <p><strong>{{ result[-1][0] }}:</strong> <a href="{{ result[-1][1] }}" target="_blank">{{ result[-1][1] }}</a></p>
+                                  </div>
+                              {% endfor %}
+                          {% elif query %}
+                              <p>No results found. Please try different criteria.</p>
+                          {% endif %}
+                      </div>
+                  </form>
+              </div>
+          
+              <script src="static/globals.js"></script>
+              <script src="static/rotate.js"></script>
+          </body>
+          </html>
+          </center>
                 
-                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script src="static/reloadplpc.js"></script>
-                <script src="static/autoscroll.js"></script><script src="static/sliders.js"></script><script src="static/map.js"></script><script src="static/fsearchautoselect.js"></script>
-            </body>
-                </script>
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script>updateslider()</script>
+                <script src="static/globals.js"></script><script src="static/css_auto.js"></script><script src="static/rotate.js"></script><script>
+                  function go() {
+                      const reference = document.getElementById('mainmenu');
+                      const target = document.getElementById('content');
+                      const r = reference.getBoundingClientRect();
+                      target.style.transform = `translateY(${r.top + r.height + 50}px)`;
+                      console.log(target.style.transform);
+                  }
+                  window.addEventListener('load', go); window.addEventListener('resize', go);</script>
+        </body>
 </html>
